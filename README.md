@@ -3,7 +3,7 @@
 
 
 # 🎯 Overview:
-mnc-timetrials is a fully featured, wager-based street racing system built for immersive time trial gameplay. Designed for both solo racing and passive server integration, this script allows players to spawn modded race vehicles, pick a wager, and complete point-to-point challenges with dynamic customization and class restrictions.
+mnc-timetrials is a fully featured, wager-based street racing system built for immersive time trial gameplay. Designed for both solo racing and passive server integration, this script allows you to spawn modded race vehicles, pick a wager, and complete point-to-point challenges with dynamic customization and class restrictions.
 
 
 # 🏎️ Features:
