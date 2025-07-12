@@ -1,5 +1,6 @@
 # mnc-timetrials
-<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/53e94ced-a40c-48db-bc7f-df4b62f0dab1" />
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/4dc19d64-6bcb-4264-ae2a-652fdac64034" />
+
 
 # 🎯 Overview:
 mnc-timetrials is a fully featured, wager-based street racing system built for immersive time trial gameplay. Designed for both solo racing and passive server integration, this script allows players to spawn modded race vehicles, pick a wager, and complete point-to-point challenges with dynamic customization and class restrictions.
@@ -33,7 +34,7 @@ mnc-timetrials is a fully featured, wager-based street racing system built for i
 
 ## 🎯 Wager System:
 
-- Choose a buy-in, and receive 2x payout on successful completion.
+- Choose a buy-in, and receive 2x buyin as payout on successful completion.
 
 ## 🎯 Dynamic Time Modifiers:
 
