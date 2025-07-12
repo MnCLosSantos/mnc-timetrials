@@ -1,4 +1,3 @@
-# mnc-timetrials
 <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/4dc19d64-6bcb-4264-ae2a-652fdac64034" />
 
 
