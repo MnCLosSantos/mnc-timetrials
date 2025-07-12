@@ -36,7 +36,7 @@ Config.Races = {
             [5000] = 0,      -- no change for 5000 wager
             [10000] = 2,     -- subtract 2 seconds for 10000 wager
             [20000] = 4,     -- subtract 2 seconds for 20000 wager
-            [40000] = 8      -- subtract 2 seconds for 40000 wager
+            [40000] = 8      -- subtract 4 seconds for 40000 wager
         },
 		
 		-- Only allow specific classes
@@ -70,7 +70,7 @@ Config.Races = {
             -- RIM AND WHEEL SETTINGS
             wheelType = 11,      -- Wheel category (0-12). Examples:
                                 -- 0=Sport, 5=Tuner, 11=Street, 12=Track
-            rimIndex = 3,        -- Specific rim in the selected category (0 to max-1)
+            rimIndex = 3,        -- Specific rim in the selected category (check helper.txt)
 
             -- SUSPENSION: 0 (stock) to 4 (lowest)
             suspension = 3,
@@ -86,10 +86,10 @@ Config.Races = {
             rearBumper = 0,
 
             -- COLOR SETTINGS
-            primaryColor = 18,      -- Use values from `Helper` list
+            primaryColor = 18,      -- Use values from (helper.txt) list
             secondaryColor = 141,   -- Use same list
-            pearlescent = 111,      -- Pearlescent color (0–159+)
-            wheelColor = 10,        -- Wheel color ID (0–159+)
+            pearlescent = 111,      -- Use same list
+            wheelColor = 10,        -- Use same list
 
             -- WINDOW TINTS
             -- 0=None, 1=Pure Black, 2=Dark Smoke, 3=Light Smoke, 4=Stock, 5=Limo
@@ -131,7 +131,7 @@ Config.Races = {
 
         -- Settings for qb-target or proximity interaction
         target = {
-            label = 'Talk to hector',       -- Label for target or E prompt
+            label = 'Talk to hector',       -- Label for target
             icon = 'fas fa-car',          -- Icon (if using qb-target)
             distance = 3.5                -- Max interaction range (1.0 to ~5.0)
         }
