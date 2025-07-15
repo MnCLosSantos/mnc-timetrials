@@ -1,8 +1,8 @@
 <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/4dc19d64-6bcb-4264-ae2a-652fdac64034" />
 
-# Midnight Club: Pinkslips (Time Trials)
+# Midnight Club: (Time Trials)
 
-A QBCore-based racing script for FiveM featuring solo wager-based time trials with high-stakes rewards, immersive props, vehicle mods, race class restrictions, and optional NPC/target interaction.
+A QBCore-based racing script for FiveM featuring solo wager-based time trials with high-stakes rewards,  vehicle mods, race class restrictions, and optional NPC/target interaction.
 
 ---
 
@@ -18,7 +18,7 @@ A QBCore-based racing script for FiveM featuring solo wager-based time trials wi
 ### ⛽ Race Mechanics
 
 * Solo, **player-triggered time trials**.
-* **Wager system**: bet against the clock, earn if you succeed.
+* **Wager system**: bet against the clock, earn cash,crypto and items if you succeed.
 * **Cooldown system** prevents spam starts.
 * Vehicle **class restrictions** and validation.
 * Automatically **detects vehicle switching** and cancels race if tampered.
@@ -36,7 +36,7 @@ A QBCore-based racing script for FiveM featuring solo wager-based time trials wi
 ### 🕹️ Interaction Methods
 
 * Configurable interaction: either **Press E** proximity detection or **qb-target** integration.
-* Optional **race NPCs with animations and props** (e.g. phone-holding)
+* Optional **race NPCs with animations**
 
 ### 🌟 UI & UX
 
@@ -81,7 +81,7 @@ A QBCore-based racing script for FiveM featuring solo wager-based time trials wi
 Edit the `Config.Races` structure to define:
 
 * `vehicleModel`: Vehicle used in the race.
-* `mods`: Table of modifications (see `printvehmods` output).
+* `mods`: Table of modifications applied to vehicle your in (see `printvehmods` output).
 * `startPoint`, `endPoint`: Vector3 race start/end.
 * `maxTime`: Time limit.
 * `cooldown`: Post-race cooldown in ms.
