@@ -70,9 +70,9 @@ A QBCore-based racing script for FiveM featuring solo wager-based time trials wi
 
 ## Dependencies
 
-* [qb-core](https://github.com/qbcore-framework/qb-core)
+* [qb-core](https://github.com/qbcore-framework/qb-core) inventory/banking/core
 * [ox\_lib](https://overextended.dev)
-* Optionally: [qb-target](https://github.com/qbcore-framework/qb-target) if `UseTarget` enabled.
+* Optionally: [qb-target](https://github.com/qbcore-framework/qb-target) if `UseTarget` enabled. and qb-crypto (if crypto not found uses bank)
 
 ---
 
