@@ -102,7 +102,7 @@ Edit the `Config.Races` structure to define:
 
 ## Support
 
-For help or contributions, contact the script author or refer to the F8 console logs for debug messages, including:
+For help or contributions, contact me or refer to the F8 console logs for debug messages, including:
 
 * Mod application logs
 * Livery/extra availability
@@ -110,5 +110,3 @@ For help or contributions, contact the script author or refer to the F8 console 
 * Wager selection traces
 
 ---
-
-**Midnight Club: Pinkslips** — High Stakes. Fast Laps. No Mercy.
