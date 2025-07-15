@@ -1,67 +1,114 @@
 <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/4dc19d64-6bcb-4264-ae2a-652fdac64034" />
 
+# Midnight Club: Pinkslips (Time Trials)
 
-# 🎯 Overview:
-mnc-timetrials is a fully featured, wager-based street racing system built for immersive time trial gameplay. Designed for both solo racing and passive server integration, this script allows you to spawn modded race vehicles, pick a wager, and complete point-to-point challenges with dynamic customization and class restrictions.
+A QBCore-based racing script for FiveM featuring solo wager-based time trials with high-stakes rewards, immersive props, vehicle mods, race class restrictions, and optional NPC/target interaction.
 
+---
 
-# 🏎️ Features:
+## Features
 
-## 🎯 Vehicle Spawn Blips: 
+### ✨ Immersive Experience
 
-- Race vehicles appear on the map via race flag blips.
+* **Blip-based vehicle spawns** for each race.
+* **Start/Finish line props** with synchronized particle effects.
+* **Neon-lit, pre-modded vehicles** tailored per race.
+* **Randomized proximity NPC quotes** for added atmosphere.
 
-## 🎯 Custom Vehicle Mod Support:
+### ⛽ Race Mechanics
 
-- Engine, Turbo, Suspension, Brakes, Neon, Wheels, Bumpers, Spoilers, Liveries, and more.
+* Solo, **player-triggered time trials**.
+* **Wager system**: bet against the clock, earn if you succeed.
+* **Cooldown system** prevents spam starts.
+* Vehicle **class restrictions** and validation.
+* Automatically **detects vehicle switching** and cancels race if tampered.
 
-## 🎯 Interactive Ped Setup: 
+### 🚗 Vehicle Mod Support
 
-- Race peds using animated phone calls near vehicles.
+* Full vehicle mod application per race entry, supporting:
 
-## 🎯 Vehicle Class Restrictions:
+  * Wheel type and rim selection
+  * Performance upgrades (engine, transmission, turbo, brakes)
+  * Visual mods (hoods, bumpers, skirts, livery, colors)
+  * Lighting: neon & xenon with configurable colors
+  * Plate & tint styles
 
-- Prevents players from using the wrong type (e.g., no vans in compact races).
+### 🕹️ Interaction Methods
 
-- Gives clear feedback with class name and allowed types.
+* Configurable interaction: either **Press E** proximity detection or **qb-target** integration.
+* Optional **race NPCs with animations and props** (e.g. phone-holding)
 
-## 🎯 Flexible Activation:
+### 🌟 UI & UX
 
-- Press E interaction
+* Integrated **NUI race UI** with selectable wagers.
+* HUD countdown with sounds & notifications.
+* Blip & waypoint management.
+* Proximity-based race tips/quotes.
 
-- qb-target entity support
+---
 
-## 🎯 Wager System:
+## Commands
 
-- Choose a buy-in, and receive 2x buyin as payout on successful completion.
+### `/listallwheels`
 
-## 🎯 Dynamic Time Modifiers:
+* Prints all available rim styles across all wheel types for current vehicle.
 
-- Lower time allowed for higher wagers.
+### `/printvehmods`
 
-## 🎯 Cooldown Logic:
+* Logs current vehicle's applied mods for config use.
 
-- Prevents spam racing; includes countdown timer on failure or completion.
+---
 
-## 🎯 Anti-Cheat Start:
+## Installation
 
-- Cancels the race if you jump the start or move before countdown ends.
+1. Add the script to your resource folder.
+2. Add `ensure mnc-timetrials` to your `server.cfg`.
+3. Configure races and props in `Config.Races`.
+4. Adjust mod templates for race vehicles if desired.
 
+---
 
+## Dependencies
 
-## 🛠️ Rim/Wheel Debugging:
+* [qb-core](https://github.com/qbcore-framework/qb-core)
+* [ox\_lib](https://overextended.dev)
+* Optionally: [qb-target](https://github.com/qbcore-framework/qb-target) if `UseTarget` enabled.
 
-- /listallwheels command prints all available wheel types and names to console, Lists all compatible wheels & names for all vehicles.
+---
 
+## Configuration
 
+Edit the `Config.Races` structure to define:
 
-## 🧠 Ideal For:
-- Time-based races
+* `vehicleModel`: Vehicle used in the race.
+* `mods`: Table of modifications (see `printvehmods` output).
+* `startPoint`, `endPoint`: Vector3 race start/end.
+* `maxTime`: Time limit.
+* `cooldown`: Post-race cooldown in ms.
+* `wagers`: Table of wager tiers (amount, timeModifier, payout).
+* `allowedClasses`: Vehicle class whitelist.
+* `ped`: (Optional) NPC model, animationSet.
+* `target`: Icon, label, distance for target mode.
 
-- Solo racing challenges
+---
 
-- Street-style server experiences
+## Development Notes
 
-- Vehicle class-restricted events
+* Fully modular and extensible.
+* Compatible with multiplayer FiveM environments.
+* Future-ready for leaderboard/stat tracking or custom race paths.
 
-- Monetized risk/reward race mechanics
+---
+
+## Support
+
+For help or contributions, contact the script author or refer to the F8 console logs for debug messages, including:
+
+* Mod application logs
+* Livery/extra availability
+* Proximity checks
+* Wager selection traces
+
+---
+
+**Midnight Club: Pinkslips** — High Stakes. Fast Laps. No Mercy.
