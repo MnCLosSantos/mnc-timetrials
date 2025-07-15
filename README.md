@@ -63,7 +63,7 @@ A QBCore-based racing script for FiveM featuring solo wager-based time trials wi
 
 1. Add the script to your resource folder.
 2. Add `ensure mnc-timetrials` to your `server.cfg`.
-3. Configure races and props in `Config.Races`.
+3. Configure races in `Config.Races`.
 4. Adjust mod templates for race vehicles if desired.
 
 ---
