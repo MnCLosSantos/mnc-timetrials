@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------------------------------------------
-RUN COMMAND "LISTALLWHEELS" COPY RIMS FROM F8 CONSOLE AND PASTE BELOW USE THIS INFO TO SPEC VEHICLES
+-- RUN COMMAND "LISTALLWHEELS" COPY RIMS FROM F8 CONSOLE AND PASTE BELOW USE THIS INFO TO SPEC VEHICLES
 ---------------------------------------------------------------------------------------------------------
 
 
@@ -132,3 +132,6 @@ Brushed Aluminum:119
 Pure Gold:158
 Brushed Gold:159
 
+---------------------------------------------------------------------------------------------------------
+-- RUN COMMAND "PRINTVEHMODS" COPY CONFIG FROM F8 CONSOLE AND PASTE INTO CONFIG ONCE VEH UPGRADE 2 SPEC
+---------------------------------------------------------------------------------------------------------

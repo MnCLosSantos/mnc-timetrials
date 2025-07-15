@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     background-color: rgba(0, 0, 0, 0.0);
-    color: white;
+    color: cyan;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,7 +19,7 @@ body {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 20px;
 }
 
@@ -28,14 +28,54 @@ button {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
-    background-color: #ff0000;
-    color: white;
+    color: black;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
 }
 
-button:hover {
-    background-color: #cc0000;
+button.easy {
+    background-color: #00ff00; /* Green */
+}
+
+button.easy:hover {
+    background-color: #00cc00; /* Darker green */
+}
+
+button.medium {
+    background-color: #ffff00; /* Yellow */
+}
+
+button.medium:hover {
+    background-color: #cccc00; /* Darker yellow */
+}
+
+button.hard {
+    background-color: #FFA200; /* Orange */
+}
+
+button.hard:hover {
+    background-color: #E18F01; /* Darker orange */
+}
+
+button.extreme {
+    background-color: #FF1038; /* Red */
+}
+
+button.extreme:hover {
+    background-color: #D40C2D; /* Darker Red */
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme) {
+    background-color: #ff0000; /* Default for Close button */
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme):hover {
+    background-color: #cc0000; /* Darker red for Close button */
+}
+
+button:disabled {
+    background-color: #666666;
+    cursor: not-allowed;
 }
