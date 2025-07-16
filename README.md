@@ -1,8 +1,8 @@
-<img width="1024" height="1024" alt="script logo" src="https://github.com/user-attachments/assets/f733410d-2bc2-4aa3-b01e-cc17e41b6233" />
-
 # Midnight Club Los Santos Time Trials 🏎️
 
-A QB-core resource for fiveM that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
+![Script Logo](https://github.com/user-attachments/assets/f733410d-2bc2-4aa3-b01e-cc17e41b6233)
+
+A QB-core resource for FiveM that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
 
 ## Features 🌟
 - **Sleek UI**: HTML interface to select wager tiers and view race details. 🎨
@@ -18,14 +18,18 @@ A QB-core resource for fiveM that powers thrilling time trial races with customi
 ## Requirements 📋
 - **QBCore Framework**: Manages player data, notifications, and vehicle spawning. 📦
 - **ox_lib**: Powers notifications. 📢
+- **qb-inventory**: Handles item-based buy-ins and rewards (e.g., `vipracepass`, `tunerchip`). 🎒
 - **qb-target** (Optional): Needed if `Config.UseTarget` is enabled. 🎯
+- **qb-crypto** (Optional): Required for `crypto` payment types in wagers. 💸
 
 ## Setup 🚀
 1. Place the `mnc-timetrials` folder in your server's `resources` directory. 📂
 2. Add to `server.cfg`:
    - `ensure ox_lib`
    - `ensure qb-core`
+   - `ensure qb-inventory`
    - `ensure qb-target` (if using `qb-target`)
+   - `ensure qb-crypto` (if using `crypto` payment types)
    - `ensure mnc-timetrials`
 3. Edit `config.lua` to define your races, buy-ins, rewards, and settings. ✏️
 4. Restart the server or run `refresh` and `start mnc-timetrials`. 🔄
@@ -74,7 +78,7 @@ The `config.lua` file lets you craft custom races with detailed settings for buy
   - **Description**: Time (ms) to reach the race start after selecting a wager. Acts as a failsafe to prevent stalling.
   - **Default**: `60000` (60 seconds).
   - **Example**: `Config.RaceStartTimeout = 30000` (30 seconds).
-  - **Failsafe**: If the player doesn’t reach the start point in time, the race cancels, and the buy-in may be forfeited (depending on server logic).
+  - **Failsafe**: If the player doesn’t reach the start point in time, the race cancels, and the buy-in may be forfeited.
 
 - **`Config.UseTarget`** 🎯:
   - **Description**: Enables `qb-target` for race interactions (requires `qb-target` resource).
@@ -194,7 +198,7 @@ The `config.lua` file lets you craft custom races with detailed settings for buy
         - `requiredItem`: Optional item required for the wager.
           - Structure: `{ name = "item_name", amount = number }`.
           - Example: `requiredItem = { name = "vipracepass", amount = 1 }`.
-          - **Failsafe**: The script checks for sufficient items before starting.
+          - **Failsafe**: The script checks for sufficient items via `qb-inventory` before starting.
         - `requiredRaces`: Number of race completions for `rewardItem`.
           - Example: `requiredRaces = 3`.
       - **Example**:
@@ -315,10 +319,12 @@ Buy-ins are defined in the `wagers` table and are required to start a race:
 - **Currency Buy-ins**:
   - Set via `amount` and `paymentType` (`cash`, `bank`, `crypto`).
   - Example: `{ amount = 5000, paymentType = "bank" }` requires 5,000 in bank funds.
+  - **Note**: `crypto` requires `qb-crypto` resource.
   - **Failsafe**: The script checks if the player has sufficient funds before starting; if not, the race is blocked with a notification.
 - **Item Buy-ins**:
   - Set via `requiredItem` with `{ name = "item_name", amount = number }`.
   - Example: `{ requiredItem = { name = "vipracepass", amount = 1 } }` requires 1 `vipracepass`.
+  - **Note**: Requires `qb-inventory` for item validation.
   - **Failsafe**: The script verifies the player’s inventory for the required item and amount, preventing race start if missing.
 
 ### Reward Types 🎁
@@ -326,11 +332,13 @@ Rewards are defined in the `wagers` table and granted on race completion:
 - **Currency Payouts**:
   - Set via `payout` and `paymentType` (`cash`, `bank`, `crypto`).
   - Example: `{ payout = 10000, paymentType = "bank" }` awards 10,000 in bank funds.
+  - **Note**: `crypto` requires `qb-crypto` resource.
 - **Item Rewards**:
   - Set via `rewardItem` with `{ name = "item_name", amount = number }`.
   - Example: `{ rewardItem = { name = "tunerchip", amount = 1 } }`.
   - Requires `requiredRaces` completions to unlock.
   - Example: `{ requiredRaces = 3 }` means 3 wins for the item.
+  - **Note**: Requires `qb-inventory` for item delivery.
 - **Failsafe**: The script tracks race completions (`requiredRaces`) and ensures rewards are only given when conditions are met.
 
 ### Failsafes 🛡️
@@ -338,7 +346,7 @@ The script includes several failsafes to ensure smooth and fair gameplay:
 - **Race Start Timeout** (`Config.RaceStartTimeout`): Cancels the race if the player doesn’t reach the start point in time, protecting against stalling.
 - **Vehicle Validation** (`requiredVehicle`, `allowedClasses`): Checks the player’s vehicle against required models or classes, blocking invalid entries.
 - **Blacklist Check** (`Config.BlacklistedVehicles`): Prevents overpowered vehicles from being used, ensuring balance.
-- **Buy-in Validation** (`amount`, `requiredItem`): Verifies sufficient funds or items before starting, avoiding exploits.
+- **Buy-in Validation** (`amount`, `requiredItem`): Verifies sufficient funds or items via `qb-inventory` (and `qb-crypto` for crypto) before starting, avoiding exploits.
 - **Cooldown System** (`cooldown`): Locks races after completion or failure to prevent spamming.
 - **Interaction Exclusivity** (`UseTarget`, `UsePressE`): Ensures only one interaction method is active to avoid conflicts.
 
@@ -386,3 +394,5 @@ The script includes several failsafes to ensure smooth and fair gameplay:
 - Balance `maxTime` and `timeModifier` for fair difficulty. ⚖️
 - Use short cooldowns (e.g., 10000ms) for testing, 20min (1200000ms) for live. ⏳
 - Use `/listallwheels` and `/printvehmods` for accurate mod settings. 🔧
+- Ensure `qb-inventory` is running for item-based buy-ins and rewards. 🎒
+- Include `qb-crypto` if using `crypto` buy-ins or payouts. 💸
