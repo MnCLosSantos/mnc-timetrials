@@ -1,5 +1,3 @@
-<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/4dc19d64-6bcb-4264-ae2a-652fdac64034" />
-
 Midnight Club Los Santos Time Trials 🏎️💨
 Overview 🌟
 Midnight Club Los Santos Time Trials is a FiveM resource for GTA V that lets players dive into thrilling time trial races with customizable wagers, vehicle restrictions, and epic rewards! 🎮 Players interact with race vehicles to open a slick UI, pick wager tiers (Easy, Medium, Hard, Extreme), and burn rubber to beat the clock. 🚗💥
@@ -162,6 +160,13 @@ Update Vehicle Mods 🛠️:
 
 Use /printvehmods to copy mod indices.
 Example: Set wheelType = 7 (High End) and primaryColor = 141 (Hot Pink). 🌸
+
+
+Adjust UI 🖥️:
+
+Edit html/style.css to move/resize UI (e.g., #main-menu, .wager-button).
+Example: Move UI to top-left:#main-menu { top: 10%; left: 10%; }
+
 
 
 
