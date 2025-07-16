@@ -6,11 +6,40 @@ window.addEventListener('message', function(event) {
     if (data.action === 'open') {
         currentRaceIndex = data.raceIndex || 1;
         const wagers = data.wagers || [];
+        const raceName = data.raceName || 'Time-Trial-Wagers'; // Fallback to default
         const wagerContainer = document.getElementById('wager-container');
+        const raceTitle = document.getElementById('race-title');
+        if (raceTitle) {
+            raceTitle.innerText = `🏁🏆${raceName}🏆🏁`; // Include emojis from original header
+        } else {
+            console.warn('Element with id "race-title" not found in the DOM');
+        }
         wagerContainer.innerHTML = '';
         wagers.forEach(wager => {
             const button = document.createElement('button');
-            button.innerText = wager.amount === 0 ? `${wager.name} - Free` : `${wager.name} - $${wager.amount}`;
+            // Calculate time to beat: maxTime - timeModifier
+            const maxTime = data.maxTime || 60; // Fallback to 60 seconds
+            const timeToBeat = maxTime - (wager.timeModifier || 0);
+            // Format time as "Xs" or "Xm Ys"
+            let timeText;
+            if (timeToBeat >= 60) {
+                const minutes = Math.floor(timeToBeat / 60);
+                const seconds = Math.floor(timeToBeat % 60);
+                timeText = `${minutes}m ${seconds}s`;
+            } else {
+                timeText = `${Math.floor(timeToBeat)}s`;
+            }
+            // Format amount based on payment type
+            let amountText;
+            if (wager.paymentType === 'cash' || wager.paymentType === 'bank') {
+                amountText = wager.amount === 0 ? 'Free' : `$${wager.amount}`;
+            } else if (wager.paymentType === 'crypto') {
+                amountText = wager.amount === 0 ? 'Free' : `${wager.amount} Qbit`;
+            } else {
+                amountText = wager.amount === 0 ? 'Free' : `$${wager.amount}`; // Fallback to $
+            }
+            // Set button text: "name - amount - time to beat"
+            button.innerText = `${wager.name.toLowerCase()} - ${amountText} - ${timeText} to beat`;
             button.className = wager.name.toLowerCase();
             button.onclick = () => selectWager(wager.amount);
             wagerContainer.appendChild(button);

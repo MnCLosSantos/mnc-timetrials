@@ -68,11 +68,11 @@ button.extreme:hover {
 }
 
 button:not(.easy):not(.medium):not(.hard):not(.extreme) {
-    background-color: #ff0000; /* Default for Close button */
+    background-color: #D40C2D; /* Default for Close button */
 }
 
 button:not(.easy):not(.medium):not(.hard):not(.extreme):hover {
-    background-color: #cc0000; /* Darker red for Close button */
+    background-color: #00fff0; /* White Close button */
 }
 
 button:disabled {

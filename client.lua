@@ -342,6 +342,14 @@ RegisterNetEvent('mnc-timetrials:client:openUIWithRace', function(raceIndex)
         return
     end
 
+    -- Apply livery to the vehicle (mod type 48, livery index 2)
+    if DoesEntityExist(vehicle) then
+        local liveryCount = GetVehicleLiveryCount(vehicle)
+        if liveryCount > 2 then
+            SetVehicleMod(vehicle, 48, 2) -- Apply livery index 2
+        end
+    end
+
     local vehicleCoords = GetEntityCoords(vehicle)
     local distance = #(playerCoords - vehicleCoords)
 
@@ -349,7 +357,13 @@ RegisterNetEvent('mnc-timetrials:client:openUIWithRace', function(raceIndex)
         if IsPedInAnyVehicle(playerPed, false) then
             uiOpen = true
             SetNuiFocus(true, true)
-            SendNUIMessage({ action = 'open', raceIndex = raceIndex, wagers = race.wagers })
+            SendNUIMessage({
+                action = 'open',
+                raceIndex = raceIndex,
+                wagers = race.wagers,
+                maxTime = race.maxTime,
+                raceName = race.name
+            })
             currentSelectedRace = raceIndex
         else
             TriggerEvent('ox_lib:notify', {
@@ -655,6 +669,51 @@ RegisterNUICallback('selectWager', function(data, cb)
         return
     end
 
+    -- Check if a specific vehicle is required
+    local vehicleModel = GetEntityModel(vehicle)
+    local vehicleName = GetDisplayNameFromVehicleModel(vehicleModel):lower()
+    if race.requiredVehicle and vehicleName ~= race.requiredVehicle:lower() then
+        TriggerEvent('ox_lib:notify', {
+            title = 'Time Trial',
+            description = 'This race requires a specific vehicle: ' .. race.requiredVehicle,
+            type = 'error',
+            duration = 5000
+        })
+        isRaceOngoing = false
+        cb('ok')
+        return
+    end
+
+    -- Check if vehicle is blacklisted, but bypass if it matches requiredVehicle
+    local isBlacklisted = false
+    if not race.requiredVehicle or vehicleName ~= race.requiredVehicle:lower() then
+        if Config.BlacklistedVehicles and race.allowedClasses then
+            for _, class in ipairs(race.allowedClasses) do
+                if Config.BlacklistedVehicles[class] then
+                    for _, blacklistedVehicle in ipairs(Config.BlacklistedVehicles[class]) do
+                        if vehicleName == blacklistedVehicle then
+                            isBlacklisted = true
+                            break
+                        end
+                    end
+                end
+                if isBlacklisted then break end
+            end
+        end
+    end
+
+    if isBlacklisted then
+        TriggerEvent('ox_lib:notify', {
+            title = 'Time Trial',
+            description = 'This vehicle is blacklisted for this race due to its high performance.',
+            type = 'error',
+            duration = 5000
+        })
+        isRaceOngoing = false
+        cb('ok')
+        return
+    end
+
     print(('[mnc-timetrials:client:selectWager] Sending wagerData for race %d: %s'):format(raceIndex, json.encode(wagerData)))
 
     local vehClass = GetVehicleClass(vehicle)
@@ -830,46 +889,483 @@ end)
 
 RegisterCommand("printvehmods", function()
     local ped = PlayerPedId()
-    if not IsPedInAnyVehicle(ped, false) then
-        print("^1[printvehmods]^0 You must be in a vehicle!")
+    local veh = GetVehiclePedIsIn(ped, false)
+    if veh == 0 then
+        print("You are not in a vehicle.")
         return
     end
 
-    local vehicle = GetVehiclePedIsIn(ped, false)
-    SetVehicleModKit(vehicle, 0)
+    local function GetColorValue(index)
+        return index or 0
+    end
 
-    local mods = {}
-    for i = 0, 49 do
-        local modIndex = GetVehicleMod(vehicle, i)
-        if modIndex >= 0 then
-            local label = GetModTextLabel(vehicle, i, modIndex)
-            local name = GetLabelText(label)
-            mods[i] = name ~= "NULL" and name or ("Mod " .. i .. " index " .. modIndex)
+    local mods = {
+        wheelType = GetVehicleWheelType(veh),
+        rimIndex = GetVehicleMod(veh, 23),
+        suspension = GetVehicleMod(veh, 15),
+        livery = GetVehicleLivery(veh),
+        spoiler = GetVehicleMod(veh, 0),
+        hood = GetVehicleMod(veh, 7),
+        skirts = GetVehicleMod(veh, 3),
+        frontBumper = GetVehicleMod(veh, 1),
+        rearBumper = GetVehicleMod(veh, 2),
+    }
+
+    -- Colors
+    local primary, secondary = GetVehicleColours(veh)
+    local pearlescent, wheelColor = GetVehicleExtraColours(veh)
+    mods.primaryColor = GetColorValue(primary)
+    mods.secondaryColor = GetColorValue(secondary)
+    mods.pearlescent = GetColorValue(pearlescent)
+    mods.wheelColor = GetColorValue(wheelColor)
+
+    -- Other
+    mods.windowTint = GetVehicleWindowTint(veh)
+    mods.plateIndex = GetVehicleNumberPlateTextIndex(veh)
+
+    -- Neon lights
+    local r, g, b = GetVehicleNeonLightsColour(veh)
+    mods.neon = {r, g, b}
+
+    -- Headlights
+    mods.headlights = GetVehicleHeadlightsColour(veh)
+
+    -- Performance mods
+    mods.engine = GetVehicleMod(veh, 11)
+    mods.transmission = GetVehicleMod(veh, 13)
+    mods.brakes = GetVehicleMod(veh, 12)
+    mods.turbo = IsToggleModOn(veh, 18)
+
+    -- Output: matching the format you gave with all comments
+    print([[
+        -- Vehicle modifications (optional)
+        mods = {
+            -- Wheel category (0-12):
+            -- 0=Sport, 1=Muscle, 2=Lowrider, 3=SUV, 4=Offroad,
+            -- 5=Tuner, 6=Bike, 7=High End, 8=Mod, 9=Open Wheel,
+            -- 10=Street, 11=Track, 12=Benny's Originals
+            wheelType = ]] .. mods.wheelType .. [[,
+
+            -- Rim index: depends on wheelType, values typically 0–25+ depending on type
+            rimIndex = ]] .. mods.rimIndex .. [[,
+
+            -- Suspension: 0=Stock, 1=Lowered, 2=Street, 3=Sport, 4=Competition
+            suspension = ]] .. mods.suspension .. [[,
+
+            -- Livery index (0–n depending on vehicle model)
+            livery = ]] .. mods.livery .. [[,
+
+            -- Visual mods (0–n varies by car, avarage 10):
+            spoiler = ]] .. mods.spoiler .. [[,
+            hood = ]] .. mods.hood .. [[,
+            skirts = ]] .. mods.skirts .. [[,
+            frontBumper = ]] .. mods.frontBumper .. [[,
+            rearBumper = ]] .. mods.rearBumper .. [[,
+
+            -- Colors (from helper.txt List):
+            -- primaryColor/secondaryColor/pearlescent/wheelColor: 0–160
+            primaryColor = ]] .. mods.primaryColor .. [[,      -- e.g. 18 = Dark Green
+            secondaryColor = ]] .. mods.secondaryColor .. [[,   -- e.g. 141 = Hot Pink
+            pearlescent = ]] .. mods.pearlescent .. [[,      -- e.g. 111 = Ultra Blue
+            wheelColor = ]] .. mods.wheelColor .. [[,        -- e.g. 10 = Black
+
+            -- Window Tints:
+            -- 0=None, 1=Pure Black, 2=Dark Smoke, 3=Light Smoke, 4=Stock, 5=Limo
+            windowTint = ]] .. mods.windowTint .. [[,
+
+            -- Plate types:
+            -- 0=Blue/White, 1=Yellow/Black, 2=Yellow/Blue, 3=Blue/White 2,
+            -- 4=Blue/White 3, 5=North Yankton, 6=SA Exempt, 7=Government,
+            -- 8=Air Force, 9=SA Exempt 2, 10=Liberty City, 11=White Plate, 12=Black Plate
+            plateIndex = ]] .. mods.plateIndex .. [[,
+
+            -- Neon light color (RGB): applies to all sides
+            neon = {]] .. mods.neon[1] .. [[, ]] .. mods.neon[2] .. [[, ]] .. mods.neon[3] .. [[}, -- Purple (neon must be enabled elsewhere)
+
+            -- Headlights (Xenon colors):
+            -- 0=White, 1=Blue, 2=Electric Blue, 3=Mint Green, 4=Lime Green,
+            -- 5=Yellow, 6=Golden Shower, 7=Orange, 8=Red, 9=Pink,
+            -- 10=Hot Pink, 11=Purple, 12=Blacklight
+            headlights = ]] .. mods.headlights .. [[,
+
+            -- Performance Mods:
+            -- 0=Stock, 1=Street, 2=Sport, 3=Race
+            engine = ]] .. mods.engine .. [[,
+            transmission = ]] .. mods.transmission .. [[,
+            brakes = ]] .. mods.brakes .. [[,
+
+            -- Turbo enabled
+            turbo = ]] .. tostring(mods.turbo) .. [[
+        
+		},
+    ]])
+end)
+
+RegisterCommand("listfastestvehicles", function()
+    local QBCore = exports['qb-core']:GetCoreObject()
+
+    -- Speed data from provided Config.BlacklistedVehicles
+    local vehicleSpeeds = {
+        -- Compacts (Class 0)
+        ["weevil"] = {speed = 123.00, name = "Weevil", class = 0},
+        ["brioso2"] = {speed = 115.50, name = "Brioso 300", class = 0},
+        ["kanjo"] = {speed = 114.25, name = "Kanjo SJ", class = 0},
+        ["issi7"] = {speed = 112.75, name = "Issi Classic", class = 0},
+        ["club"] = {speed = 112.50, name = "Club", class = 0},
+        ["asbo"] = {speed = 110.00, name = "Asbo", class = 0},
+        ["brioso"] = {speed = 108.25, name = "Brioso R/A", class = 0},
+        ["panto"] = {speed = 107.50, name = "Panto", class = 0},
+        ["dilettante"] = {speed = 106.50, name = "Dilettante", class = 0},
+        ["issi2"] = {speed = 104.25, name = "Issi", class = 0},
+        -- Sedans (Class 1)
+        ["schafter4"] = {speed = 123.50, name = "Schafter LWB (Armored)", class = 1},
+        ["schafter3"] = {speed = 123.25, name = "Schafter V12", class = 1},
+        ["tailgater2"] = {speed = 122.00, name = "Tailgater S", class = 1},
+        ["glendale2"] = {speed = 119.50, name = "Glendale Custom", class = 1},
+        ["warrener2"] = {speed = 118.75, name = "Warrener HKR", class = 1},
+        ["cinquemila"] = {speed = 117.50, name = "Cinquemila", class = 1},
+        ["deity"] = {speed = 117.25, name = "Deity", class = 1},
+        ["stafford"] = {speed = 116.00, name = "Stafford", class = 1},
+        ["primo2"] = {speed = 115.75, name = "Primo Custom", class = 1},
+        ["tailgater"] = {speed = 115.25, name = "Tailgater", class = 1},
+        -- SUVs (Class 2)
+        ["astron"] = {speed = 119.00, name = "Astron", class = 2},
+        ["baller7"] = {speed = 118.75, name = "Baller ST", class = 2},
+        ["novak"] = {speed = 118.50, name = "Novak", class = 2},
+        ["jubilee"] = {speed = 118.25, name = "Jubilee", class = 2},
+        ["granger2"] = {speed = 117.75, name = "Granger 3600LX", class = 2},
+        ["toros"] = {speed = 117.50, name = "Toros", class = 2},
+        ["xls2"] = {speed = 117.25, name = "XLS (Armored)", class = 2},
+        ["cavalcade2"] = {speed = 116.75, name = "Cavalcade", class = 2},
+        ["rebla"] = {speed = 116.50, name = "Rebla GTS", class = 2},
+        ["baller4"] = {speed = 116.25, name = "Baller LE LWB", class = 2},
+        -- Coupes (Class 3)
+        ["zion3"] = {speed = 117.75, name = "Zion Classic", class = 3},
+        ["previon"] = {speed = 115.50, name = "Previon", class = 3},
+        ["futo2"] = {speed = 115.25, name = "Futo GTX", class = 3},
+        ["sultan"] = {speed = 115.00, name = "Sultan", class = 3},
+        ["sentinel3"] = {speed = 114.75, name = "Sentinel Classic", class = 3},
+        ["futo"] = {speed = 114.50, name = "Futo", class = 3},
+        ["sultan2"] = {speed = 114.25, name = "Sultan RS Classic", class = 3},
+        ["windsor2"] = {speed = 113.50, name = "Windsor Drop", class = 3},
+        ["feltzer2"] = {speed = 112.75, name = "Feltzer", class = 3},
+        ["windsor"] = {speed = 112.50, name = "Windsor", class = 3},
+        -- Muscle (Class 4)
+        ["dominator3"] = {speed = 131.00, name = "Dominator ASP", class = 4},
+        ["impaler"] = {speed = 130.25, name = "Impaler", class = 4},
+        ["sabregt2"] = {speed = 129.75, name = "Sabre Turbo Custom", class = 4},
+        ["yosemite"] = {speed = 129.25, name = "Yosemite", class = 4},
+        ["gauntlet5"] = {speed = 127.50, name = "Gauntlet Classic Custom", class = 4},
+        ["dominator7"] = {speed = 126.75, name = "Dominator GTX", class = 4},
+        ["dominator"] = {speed = 126.50, name = "Dominator", class = 4},
+        ["dukes"] = {speed = 126.25, name = "Dukes", class = 4},
+        ["blade"] = {speed = 125.75, name = "Blade", class = 4},
+        ["faction"] = {speed = 125.50, name = "Faction", class = 4},
+        -- Sports Classics (Class 5)
+        ["toreador"] = {speed = 135.25, name = "Toreador", class = 5},
+        ["italirsx"] = {speed = 135.00, name = "Itali RSX", class = 5},
+        ["rapidgt3"] = {speed = 134.75, name = "Rapid GT Classic", class = 5},
+        ["retinue2"] = {speed = 134.50, name = "Retinue Mk II", class = 5},
+        ["cheetah2"] = {speed = 134.25, name = "Cheetah Classic", class = 5},
+        ["gt500"] = {speed = 134.00, name = "GT500", class = 5},
+        ["torero"] = {speed = 133.75, name = "Torero", class = 5},
+        ["casco"] = {speed = 133.50, name = "Casco", class = 5},
+        ["coquette3"] = {speed = 133.25, name = "Coquette BlackFin", class = 5},
+        ["stingergt"] = {speed = 133.00, name = "Stinger GT", class = 5},
+        -- Sports (Class 6)
+        ["pariah"] = {speed = 136.00, name = "Pariah", class = 6},
+        ["italigto"] = {speed = 135.50, name = "Itali GTO", class = 6},
+        ["jester4"] = {speed = 135.25, name = "Jester RR", class = 6},
+        ["elegy2"] = {speed = 134.75, name = "Elegy RH8", class = 6},
+        ["neo"] = {speed = 134.50, name = "Neo", class = 6},
+        ["sultan3"] = {speed = 134.25, name = "Sultan RS", class = 6},
+        ["comet5"] = {speed = 134.00, name = "Comet SR", class = 6},
+        ["calico"] = {speed = 133.75, name = "Calico GTF", class = 6},
+        ["schlagen"] = {speed = 133.50, name = "Schlagen GT", class = 6},
+        ["jugular"] = {speed = 133.25, name = "Jugular", class = 6},
+        -- Super (Class 7)
+        ["deveste"] = {speed = 140.50, name = "Deveste Eight", class = 7},
+        ["adder"] = {speed = 140.25, name = "Adder", class = 7},
+        ["krieger"] = {speed = 140.00, name = "Krieger", class = 7},
+        ["emerus"] = {speed = 139.75, name = "Emerus", class = 7},
+        ["thrax"] = {speed = 139.50, name = "Thrax", class = 7},
+        ["zorrusso"] = {speed = 139.25, name = "Zorrusso", class = 7},
+        ["taipan"] = {speed = 139.00, name = "Taipan", class = 7},
+        ["tigon"] = {speed = 138.75, name = "Tigon", class = 7},
+        ["entity2"] = {speed = 138.50, name = "Entity XXR", class = 7},
+        ["tezeract"] = {speed = 138.25, name = "Tezeract", class = 7},
+        -- Motorcycles (Class 8)
+        ["hakuchou2"] = {speed = 157.50, name = "Hakuchou Drag", class = 8},
+        ["shotaro"] = {speed = 155.25, name = "Shotaro", class = 8},
+        ["vortex"] = {speed = 154.75, name = "Vortex", class = 8},
+        ["bati2"] = {speed = 154.50, name = "Bati 801RR", class = 8},
+        ["bati"] = {speed = 154.25, name = "Bati 801", class = 8},
+        ["defiler"] = {speed = 154.00, name = "Defiler", class = 8},
+        ["hakuchou"] = {speed = 153.75, name = "Hakuchou", class = 8},
+        ["carbonrs"] = {speed = 153.50, name = "Carbon RS", class = 8},
+        ["double"] = {speed = 153.25, name = "Double-T", class = 8},
+        ["akuma"] = {speed = 153.00, name = "Akuma", class = 8},
+        -- Off-road (Class 9)
+        ["brawler"] = {speed = 117.75, name = "Brawler", class = 9},
+        ["kamacho"] = {speed = 116.75, name = "Kamacho", class = 9},
+        ["riata"] = {speed = 116.50, name = "Riata", class = 9},
+        ["sandking"] = {speed = 116.25, name = "Sandking XL", class = 9},
+        ["sandking2"] = {speed = 116.00, name = "Sandking SWB", class = 9},
+        ["trophytruck"] = {speed = 115.75, name = "Trophy Truck", class = 9},
+        ["desertraid"] = {speed = 115.50, name = "Desert Raid", class = 9},
+        ["bf400"] = {speed = 115.25, name = "BF400", class = 9},
+        ["rancherxl"] = {speed = 115.00, name = "Rancher XL", class = 9},
+        ["rebel2"] = {speed = 114.75, name = "Rebel", class = 9},
+        -- Industrial (Class 10)
+        ["mixer2"] = {speed = 108.50, name = "Mixer", class = 10},
+        ["mixer"] = {speed = 108.25, name = "Mixer", class = 10},
+        ["rubble"] = {speed = 108.00, name = "Rubble", class = 10},
+        ["tiptruck2"] = {speed = 107.75, name = "Tipper", class = 10},
+        ["tiptruck"] = {speed = 107.50, name = "Tipper", class = 10},
+        ["guardian"] = {speed = 107.25, name = "Guardian", class = 10},
+        ["bulldozer"] = {speed = 100.00, name = "Dozer", class = 10},
+        -- Utility (Class 11)
+        ["tractor2"] = {speed = 95.00, name = "Fieldmaster", class = 11},
+        ["tractor"] = {speed = 90.00, name = "Tractor", class = 11},
+        ["utillitruck3"] = {speed = 89.75, name = "Utility Truck", class = 11},
+        ["utillitruck2"] = {speed = 89.50, name = "Utility Truck (Flatbed)", class = 11},
+        ["utillitruck"] = {speed = 89.25, name = "Utility Truck (Large)", class = 11},
+        ["dune"] = {speed = 89.00, name = "Dune Buggy", class = 11},
+        ["caddy3"] = {speed = 88.75, name = "Caddy (Bunker)", class = 11},
+        ["caddy2"] = {speed = 88.50, name = "Caddy (Civilian)", class = 11},
+        ["caddy"] = {speed = 88.25, name = "Caddy", class = 11},
+        ["forklift"] = {speed = 88.00, name = "Forklift", class = 11},
+        -- Vans (Class 12)
+        ["speedo4"] = {speed = 115.25, name = "Speedo Custom", class = 12},
+        ["bison"] = {speed = 114.75, name = "Bison", class = 12},
+        ["rumpo3"] = {speed = 114.50, name = "Rumpo Custom", class = 12},
+        ["burrito3"] = {speed = 114.25, name = "Burrito", class = 12},
+        ["youga2"] = {speed = 114.00, name = "Youga Classic", class = 12},
+        ["youga3"] = {speed = 113.75, name = "Youga Classic 4x4", class = 12},
+        ["rumpo"] = {speed = 113.50, name = "Rumpo", class = 12},
+        ["burrito"] = {speed = 113.25, name = "Burrito", class = 12},
+        ["youga"] = {speed = 113.00, name = "Youga", class = 12},
+        ["pony"] = {speed = 112.75, name = "Pony", class = 12},
+        -- Cycles (Class 13)
+        ["bmx"] = {speed = 30.00, name = "BMX", class = 13},
+        ["cruiser"] = {speed = 30.00, name = "Cruiser", class = 13},
+        ["scorcher"] = {speed = 29.00, name = "Scorcher", class = 13},
+        ["tribike"] = {speed = 29.00, name = "Whippet Race Bike", class = 13},
+        ["tribike2"] = {speed = 29.00, name = "Endurex Race Bike", class = 13},
+        ["tribike3"] = {speed = 29.00, name = "Tri-Cycles Race Bike", class = 13},
+        ["fixter"] = {speed = 28.00, name = "Fixter", class = 13},
+        -- Boats (Class 14)
+        ["longfin"] = {speed = 122.00, name = "Longfin", class = 14},
+        ["kurtz31"] = {speed = 115.50, name = "Kurtz 31 Patrol Boat", class = 14},
+        ["weaponizeddinghy"] = {speed = 115.25, name = "Weaponized Dinghy", class = 14},
+        ["toro2"] = {speed = 115.00, name = "Toro", class = 14},
+        ["toro"] = {speed = 114.75, name = "Toro", class = 14},
+        ["speedo"] = {speed = 114.50, name = "Speeder", class = 14},
+        ["jetmax"] = {speed = 114.25, name = "Jetmax", class = 14},
+        ["squalo"] = {speed = 114.00, name = "Squalo", class = 14},
+        ["suntrap"] = {speed = 113.75, name = "Suntrap", class = 14},
+        ["tropic"] = {speed = 113.50, name = "Tropic", class = 14},
+        -- Helicopters (Class 15)
+        ["akula"] = {speed = 157.25, name = "Akula", class = 15},
+        ["hunter"] = {speed = 156.75, name = "FH-1 Hunter", class = 15},
+        ["annihilator2"] = {speed = 156.50, name = "Annihilator Stealth", class = 15},
+        ["sparrow"] = {speed = 156.25, name = "Sparrow", class = 15},
+        ["seasparrow"] = {speed = 156.00, name = "Sea Sparrow", class = 15},
+        ["havok"] = {speed = 155.75, name = "Havok", class = 15},
+        ["supervolito2"] = {speed = 155.50, name = "SuperVolito Carbon", class = 15},
+        ["supervolito"] = {speed = 155.25, name = "SuperVolito", class = 15},
+        ["swift2"] = {speed = 155.00, name = "Swift Deluxe", class = 15},
+        ["swift"] = {speed = 154.75, name = "Swift", class = 15},
+        -- Planes (Class 16)
+        ["hydra"] = {speed = 209.25, name = "Hydra", class = 16},
+        ["lazer"] = {speed = 208.75, name = "P-996 LAZER", class = 16},
+        ["pyro"] = {speed = 208.50, name = "Pyro", class = 16},
+        ["starling"] = {speed = 208.25, name = "LF-22 Starling", class = 16},
+        ["molotok"] = {speed = 208.00, name = "V-65 Molotok", class = 16},
+        ["nokota"] = {speed = 207.75, name = "P-45 Nokota", class = 16},
+        ["seabreeze"] = {speed = 207.50, name = "Seabreeze", class = 16},
+        ["rogue"] = {speed = 207.25, name = "Rogue", class = 16},
+        ["strikeforce"] = {speed = 207.00, name = "B-11 Strikeforce", class = 16},
+        ["howard"] = {speed = 206.75, name = "Howard NX-25", class = 16},
+        -- Service (Class 17)
+        ["bus"] = {speed = 107.25, name = "Bus", class = 17},
+        ["airbus"] = {speed = 107.00, name = "Airport Bus", class = 17},
+        ["taxi"] = {speed = 106.75, name = "Taxi", class = 17},
+        ["tourbus"] = {speed = 106.50, name = "Tour Bus", class = 17},
+        ["trash2"] = {speed = 106.25, name = "Trashmaster", class = 17},
+        ["trash"] = {speed = 106.00, name = "Trashmaster", class = 17},
+        ["coach"] = {speed = 105.75, name = "Coach", class = 17},
+        ["rentbus"] = {speed = 105.50, name = "Rental Shuttle Bus", class = 17},
+        ["brickade"] = {speed = 105.25, name = "Brickade", class = 17},
+        ["brickade2"] = {speed = 105.00, name = "Brickade 6x6", class = 17},
+        -- Emergency (Class 18)
+        ["fbi"] = {speed = 118.75, name = "FIB", class = 18},
+        ["fbi2"] = {speed = 118.50, name = "FIB SUV", class = 18},
+        ["police3"] = {speed = 118.25, name = "Police Interceptor", class = 18},
+        ["police2"] = {speed = 118.00, name = "Police Cruiser (Stanier)", class = 18},
+        ["sheriff"] = {speed = 117.75, name = "Sheriff Cruiser", class = 18},
+        ["sheriff2"] = {speed = 117.50, name = "Sheriff SUV", class = 18},
+        ["police"] = {speed = 117.25, name = "Police Cruiser (Buffalo)", class = 18},
+        ["pranger"] = {speed = 117.00, name = "Park Ranger", class = 18},
+        ["police4"] = {speed = 116.75, name = "Unmarked Cruiser", class = 18},
+        ["ambulance"] = {speed = 116.50, name = "Ambulance", class = 18},
+        -- Military (Class 19)
+        ["barracks"] = {speed = 110.00, name = "Barracks", class = 19},
+        ["barracks3"] = {speed = 109.75, name = "Barracks Semi", class = 19},
+        ["crusader"] = {speed = 109.50, name = "Crusader", class = 19},
+        ["rhino"] = {speed = 90.00, name = "Rhino Tank", class = 19},
+        ["barrage"] = {speed = 89.75, name = "Barrage", class = 19},
+        ["chernobog"] = {speed = 89.50, name = "Chernobog", class = 19},
+        ["khanjali"] = {speed = 89.25, name = "TM-02 Khanjali", class = 19},
+        ["scarab"] = {speed = 89.00, name = "Apocalypse Scarab", class = 19},
+        ["scarab2"] = {speed = 88.75, name = "Future Shock Scarab", class = 19},
+        ["scarab3"] = {speed = 88.50, name = "Nightmare Scarab", class = 19},
+        -- Commercial (Class 20)
+        ["hauler"] = {speed = 108.75, name = "Hauler", class = 20},
+        ["packer"] = {speed = 108.50, name = "Packer", class = 20},
+        ["phantom"] = {speed = 108.25, name = "Phantom", class = 20},
+        ["benson"] = {speed = 108.00, name = "Benson", class = 20},
+        ["mule4"] = {speed = 107.75, name = "Mule Custom", class = 20},
+        ["mule3"] = {speed = 107.50, name = "Mule", class = 20},
+        ["mule"] = {speed = 107.25, name = "Mule", class = 20},
+        ["pounder"] = {speed = 107.00, name = "Pounder", class = 20},
+        ["stockade"] = {speed = 106.75, name = "Stockade", class = 20},
+        ["flatbed"] = {speed = 106.50, name = "Flatbed", class = 20},
+        -- Trains (Class 21)
+        ["freight"] = {speed = 0.00, name = "Freight Train", class = 21},
+        ["freightcar"] = {speed = 0.00, name = "Freight Car", class = 21},
+        ["freightcont1"] = {speed = 0.00, name = "Freight Container 1", class = 21},
+        ["freightcont2"] = {speed = 0.00, name = "Freight Container 2", class = 21},
+        ["freightgrain"] = {speed = 0.00, name = "Freight Grain Car", class = 21},
+        ["tankercar"] = {speed = 0.00, name = "Tanker Car", class = 21}
+    }
+
+    -- Category to class mapping
+    local categoryToClass = {
+        ["compacts"] = 0,
+        ["sedans"] = 1,
+        ["suvs"] = 2,
+        ["coupes"] = 3,
+        ["muscle"] = 4,
+        ["sportsclassics"] = 5,
+        ["sports"] = 6,
+        ["super"] = 7,
+        ["motorcycles"] = 8,
+        ["offroad"] = 9,
+        ["industrial"] = 10,
+        ["utility"] = 11,
+        ["vans"] = 12,
+        ["cycles"] = 13,
+        ["boats"] = 14,
+        ["helicopters"] = 15,
+        ["planes"] = 16,
+        ["service"] = 17,
+        ["emergency"] = 18,
+        ["military"] = 19,
+        ["commercial"] = 20,
+        ["trains"] = 21
+    }
+
+    -- Class names for output
+    local classNames = {
+        [0] = "Compacts",
+        [1] = "Sedans",
+        [2] = "SUVs",
+        [3] = "Coupes",
+        [4] = "Muscle",
+        [5] = "Sports Classics",
+        [6] = "Sports",
+        [7] = "Super",
+        [8] = "Motorcycles",
+        [9] = "Off-road",
+        [10] = "Industrial",
+        [11] = "Utility",
+        [12] = "Vans",
+        [13] = "Cycles",
+        [14] = "Boats",
+        [15] = "Helicopters",
+        [16] = "Planes",
+        [17] = "Service",
+        [18] = "Emergency",
+        [19] = "Military",
+        [20] = "Commercial",
+        [21] = "Trains"
+    }
+
+    -- Collect vehicles by class
+    local vehiclesByClass = {}
+    for i = 0, 21 do
+        vehiclesByClass[i] = {}
+    end
+
+    -- Try to access QBShared.Vehicles
+    local QBShared = QBCore.Shared or {}
+    local vehicles = QBShared.Vehicles
+
+    if vehicles then
+        for model, data in pairs(vehicles) do
+            local category = data.category and data.category:lower() or "unknown"
+            local class = categoryToClass[category]
+            if class then
+                local speedData = vehicleSpeeds[model] or {speed = 100.00, name = data.name}
+                table.insert(vehiclesByClass[class], {
+                    model = model,
+                    name = data.name, -- Use name from vehicles.lua
+                    speed = speedData.speed
+                })
+            end
+        end
+    else
+        -- Fallback: Use vehicleSpeeds data if QBShared.Vehicles is unavailable
+        TriggerEvent('chat:addMessage', {
+            args = { '^1[listfastestvehicles]^0 Warning: QBShared.Vehicles not found. Using fallback data.' },
+            color = { 255, 0, 0 }
+        })
+        for model, data in pairs(vehicleSpeeds) do
+            local class = data.class
+            table.insert(vehiclesByClass[class], {
+                model = model,
+                name = data.name,
+                speed = data.speed
+            })
         end
     end
 
-    local livery = GetVehicleLivery(vehicle)
-    if livery >= 0 then
-        mods.livery = livery
+    -- Sort and format output
+    local output = "-- Blacklisted vehicles (top 10 fastest per class based on top speed, fully upgraded where applicable)\n"
+    output = output .. "Config.BlacklistedVehicles = {\n"
+
+    for class = 0, 21 do
+        -- Sort vehicles by speed (descending)
+        table.sort(vehiclesByClass[class], function(a, b) return a.speed > b.speed end)
+
+        -- Get top 10 (or all if fewer)
+        local topVehicles = {}
+        for i = 1, math.min(10, #vehiclesByClass[class]) do
+            topVehicles[i] = vehiclesByClass[class][i]
+        end
+
+        -- Format class section
+        output = output .. string.format("    -- %s (Class %d)\n", classNames[class], class)
+        output = output .. string.format("    [%d] = {\n", class)
+        for i, veh in ipairs(topVehicles) do
+            local speedStr = (class == 13 or class == 21) and "limited speed data" or string.format("%.2f mph", veh.speed)
+            output = output .. string.format("        \"%s\",%s-- %s (%s)\n", veh.model, string.rep(" ", 15 - #veh.model), veh.name, speedStr)
+        end
+        if #topVehicles < 10 and (class == 10 or class == 13 or class == 21) then
+            output = output .. string.format("        -- Only %d vehicles available in %s class\n", #topVehicles, classNames[class])
+        end
+        output = output .. "    },\n"
     end
 
-    local colors = {GetVehicleColours(vehicle)}
-    mods.primaryColor = colors[1]
-    mods.secondaryColor = colors[2]
-    local extraColors = {GetVehicleExtraColours(vehicle)}
-    mods.pearlescent = extraColors[1]
-    mods.wheelColor = extraColors[2]
-    mods.windowTint = GetVehicleWindowTint(vehicle)
-    mods.plateIndex = GetVehicleNumberPlateTextIndex(vehicle)
-    mods.wheelType = GetVehicleWheelType(vehicle)
+    output = output .. "}\n"
 
-    print("^2--- VEHICLE MODS ---^0")
-    for k, v in pairs(mods) do
-        print(("%s: %s"):format(tostring(k), tostring(v)))
-    end
+    -- Print to console
+    print(output)
 
+    -- Notify user
     TriggerEvent('chat:addMessage', {
-        args = { '^2[printvehmods]^0 Vehicle mods printed to F8 console.' },
+        args = { '^2[listfastestvehicles]^0 Top 10 fastest vehicles per class printed to F8 console.' },
         color = { 0, 255, 0 }
     })
 end)
