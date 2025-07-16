@@ -2,7 +2,7 @@
 
 # Midnight Club Los Santos Time Trials 🏎️
 
-A FiveM resource for GTA V that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
+A QB-core resource for fiveM that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
 
 ## Features 🌟
 - **Sleek UI**: HTML interface to select wager tiers and view race details. 🎨
