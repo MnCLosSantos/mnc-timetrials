@@ -1,3 +1,4 @@
+<img width="1024" height="1024" alt="script logo" src="https://github.com/user-attachments/assets/f733410d-2bc2-4aa3-b01e-cc17e41b6233" />
 # Midnight Club Los Santos Time Trials 🏎️
 
 A FiveM resource for GTA V that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
