@@ -16,10 +16,11 @@ A QB-core resource for FiveM that powers thrilling time trial races with customi
 - **Failsafes**: Timeout checks, vehicle validation, and cooldowns ensure fair play. 🛡️
 
 ## Requirements 📋
-- **QBCore Framework**: Manages player data and vehicle spawning. 📦
+- **QBCore/QBOX Framework**: Manages player data and vehicle spawning. 📦
 - **ox_lib**: Powers notifications. 📢
-- **qb-inventory**: Handles item-based buy-ins and rewards (e.g., `vipracepass`, `tunerchip`). 🎒
+- **qb/ox-inventory**: Handles item-based buy-ins and rewards (e.g., `vipracepass`, `tunerchip`). 🎒
 - **qb-target** (Optional): Needed if `Config.UseTarget` is enabled. 🎯
+- **MnC-TuneX** (Optional): Used for reward item. 🎯 https://github.com/MnCLosSantos/MnC-TuneX
 - **qb-crypto** (Optional): Required for `crypto` payment types in wagers. 💸
 
 ## Setup 🚀
