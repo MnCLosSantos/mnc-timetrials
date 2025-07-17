@@ -2,7 +2,7 @@
 
 ![Script Logo](https://github.com/user-attachments/assets/f733410d-2bc2-4aa3-b01e-cc17e41b6233)
 
-A QB-core resource for FiveM that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
+A QB/QBOX Framework resource for FiveM that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
 
 ## Features 🌟
 - **Sleek UI**: HTML interface to select wager tiers and view race details. 🎨
