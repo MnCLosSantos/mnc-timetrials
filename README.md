@@ -1,5 +1,8 @@
 # 🏁 Midnight Club - Time Trials with Wagers 🏆
-![mnc-timetrials-logo](https://github.com/user-attachments/assets/a81ce027-10fd-4325-a813-0b12a847dd35)
+
+![mnc-timetrials-logo|690x388](upload://553hJ16qD9IDGThJNPLOiD50h3J.jpeg)
+
+
 ## 🚦 Overview
 
 Welcome to **Midnight Club Time Trials** – bring the thrill of wager-based racing to your FiveM server! Challenge players to beat the clock, risk their cash, bank, or crypto, and unlock exclusive rewards! Fully compatible with QBCore, packed with customization, immersive UI, and plenty of racing attitude.  
@@ -32,12 +35,12 @@ Welcome to **Midnight Club Time Trials** – bring the thrill of wager-based rac
 
 2. **Installation:**  
    - Place the folder in your `resources` directory.  
-   - Add `ensure midnightclub-timetrials` to your server config.  
+   - Add `ensure mnc-timetrials` to your server config.  
    - Make sure dependencies start first!
 
 3. **Configuration:**  
    - Edit `config.lua` to set up races, buy-ins/buyouts, rewards, vehicles, NPCs, and more.
-   - Customize proximity taunts, blip names, UI positions, and cooldowns.
+   - Customize proximity taunts, blip names, and cooldowns.
 
 ---
 
@@ -92,20 +95,6 @@ wagers = {
 
 ---
 
-## 📦 File Structure
-
-| File                      | Purpose                                      |
-|---------------------------|----------------------------------------------|
-| `client.lua`              | Player logic, UI, controls, events           |
-| `server.lua`              | Wagers, payouts, race progress, anti-cheat   |
-| `config.lua`              | All race, reward, vehicle & NPC settings     |
-| `vehicle_spawner.lua`     | NPC/vehicle spawn & cleanup (server)         |
-| `vehicle_spawner_client.lua` | NPC/vehicle spawn (client)                |
-| `fxmanifest.lua`          | Resource manifest, dependencies              |
-| `html/`                   | UI assets (customizable)                     |
-
----
-
 ## 🛠️ Customization
 
 - **Add Races:** Copy/paste a race entry in `Config.Races` and set locations, vehicles, rewards, etc.
@@ -117,7 +106,7 @@ wagers = {
 
 ## 🙏 Credits
 
-- Developed by **Midnight Club**
+- Developed by **Stan Leigh**
 - Inspired by classic street racing and time trial games
 
 ---
@@ -129,3 +118,11 @@ Open a GitHub issue for help, suggestions, or bug reports!
 ---
 
 **Start your engines. Bet big. Race hard. Win respect.**
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+|-----------------------------|--------------------|
+| Code is accessible | Yes |
+| Subscription | No |
+| Support | Yes |
+|-----------------------------|--------------------|
