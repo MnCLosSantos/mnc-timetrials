@@ -1,6 +1,6 @@
 # 🏁 Midnight Club - Time Trials with Wagers 🏆
 
-![mnc-timetrials-logo|690x388](upload://553hJ16qD9IDGThJNPLOiD50h3J.jpeg)
+![mnc-timetrials-logo](https://github.com/user-attachments/assets/63f7ad78-77ac-4b6c-8c82-4c24f0fc277a)
 
 
 ## 🚦 Overview
