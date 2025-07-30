@@ -1,4 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+local currentWagers = {} -- Initialize the table to store active wagers
 
 -- Check if a money type is valid in QBCore
 local function IsValidMoneyType(moneyType)
@@ -90,6 +91,8 @@ RegisterServerEvent('mnc-timetrials:server:chargeWager', function(wagerData)
     -- Handle free wagers (amount = 0)
     if wagerData.amount == 0 then
         print('[mnc-timetrials:server:chargeWager] Free wager accepted for player ' .. Player.PlayerData.citizenid)
+        currentWagers[src] = wagerData -- Store the wager data for this player
+        print('[mnc-timetrials:server:chargeWager] Stored wager for player ' .. Player.PlayerData.citizenid .. ': ' .. json.encode(wagerData))
         TriggerClientEvent('mnc-timetrials:client:wagerAccepted', src, wagerData)
         return
     end
@@ -154,6 +157,7 @@ RegisterServerEvent('mnc-timetrials:server:chargeWager', function(wagerData)
     print('[mnc-timetrials:server:chargeWager] Attempted to remove ' .. wagerData.amount .. ' ' .. paymentType .. ' from player ' .. Player.PlayerData.citizenid .. ': ' .. (moneyRemoved and 'Success' or 'Failed'))
 
     if not moneyRemoved then
+        currentWagers[src] = nil -- Clear wager if payment fails
         TriggerClientEvent('ox_lib:notify', src, {
             title = 'Time Trial',
             description = 'Failed to process ' .. (paymentType == 'crypto' and 'Crypto' or paymentType:gsub("^%l", string.upper)) .. ' payment. Contact an admin.',
@@ -163,6 +167,10 @@ RegisterServerEvent('mnc-timetrials:server:chargeWager', function(wagerData)
         TriggerClientEvent('mnc-timetrials:client:cancelRace', src)
         return
     end
+
+    -- After successful wager processing, store wager data
+    currentWagers[src] = wagerData -- Store the wager data for this player
+    print('[mnc-timetrials:server:chargeWager] Stored wager for player ' .. Player.PlayerData.citizenid .. ': ' .. json.encode(wagerData))
 
     -- Remove required item if applicable
     if wagerData.requiredItem then
@@ -274,34 +282,37 @@ RegisterServerEvent('mnc-timetrials:server:payout', function(wagerData, raceInde
             duration = 5000
         })
     end
+
+    -- Clear wager data after payout
+    currentWagers[src] = nil
+    print('[mnc-timetrials:server:payout] Cleared wager data for player source ' .. src)
 end)
 
--- Optional: Command to reset race count for testing or admin purposes
-RegisterCommand('resetracecount', function(source, args, rawCommand)
+-- Server callback to initialize player data
+QBCore.Functions.CreateCallback('mnc-timetrials:server:initPlayer', function(source, cb)
     local Player = QBCore.Functions.GetPlayer(source)
     if not Player then
-        print('[mnc-timetrials:server:resetracecount] Error: Player not found for source ' .. source)
+        cb({success = false})
         return
     end
+    local citizenId = Player.PlayerData.citizenid
+    raceCounts[citizenId] = Player.PlayerData.metadata['racecounts'] or {}
+    cb({success = true})
+end)
 
-    local raceIndex = tonumber(args[1])
-    local wagerAmount = tonumber(args[2])
+-- Event to handle player disconnect
+AddEventHandler('playerDropped', function()
+    local src = source
+    currentWagers[src] = nil
+    print('[mnc-timetrials:server:playerDropped] Cleared wager data for player source ' .. src)
+end)
 
-    if not raceIndex or not wagerAmount then
-        TriggerClientEvent('ox_lib:notify', source, {
-            title = 'Reset Race Count',
-            description = 'Usage: /resetracecount [raceIndex] [wagerAmount]',
-            type = 'error',
-            duration = 5000
-        })
-        return
-    end
-
-    ResetRaceCompletionCount(Player, raceIndex, wagerAmount)
-    TriggerClientEvent('ox_lib:notify', source, {
-        title = 'Reset Race Count',
-        description = 'Race count reset for race ' .. raceIndex .. ' wager ' .. wagerAmount,
-        type = 'success',
-        duration = 5000
-    })
-end, true) -- Set to true for admin-only access
+-- Initialize players when they connect
+AddEventHandler('playerConnecting', function()
+    local src = source
+    QBCore.Functions.CreateCallback('mnc-timetrials:server:initPlayer', src, function(result)
+        if result.success then
+            print(('Initialized race data for player %d'):format(src))
+        end
+    end)
+end)

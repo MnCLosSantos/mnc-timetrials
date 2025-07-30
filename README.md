@@ -1,399 +1,131 @@
-# Midnight Club Los Santos Time Trials 🏎️
-
+# 🏁 Midnight Club - Time Trials with Wagers 🏆
 ![mnc-timetrials-logo](https://github.com/user-attachments/assets/a81ce027-10fd-4325-a813-0b12a847dd35)
+## 🚦 Overview
 
-A QB/QBOX Framework resource for FiveM that powers thrilling time trial races with customizable buy-ins, rewards, vehicle restrictions, and robust failsafes. 🚗 Create your own races with tailored settings for an epic racing experience! 🎮
+Welcome to **Midnight Club Time Trials** – bring the thrill of wager-based racing to your FiveM server! Challenge players to beat the clock, risk their cash, bank, or crypto, and unlock exclusive rewards! Fully compatible with QBCore, packed with customization, immersive UI, and plenty of racing attitude.  
+**Get started, get paid, get respect.**
 
-## Features 🌟
-- **Sleek UI**: HTML interface to select wager tiers and view race details. 🎨
-- **Race Mechanics**: Time-based races with start/finish markers. ⏱️
-- **Custom Vehicles**: Spawn race cars with mods (wheels, colors, performance). 🛠️
-- **Buy-ins & Rewards**: Bet cash, bank, crypto, or items with scalable payouts. 💰
-- **Cooldowns**: Prevent spamming with adjustable timers. ⏳
-- **NPC Taunts**: Randomized messages near race vehicles for immersion. 🗣️
-- **Interactions**: Start races with "Press E" or `qb-target`. 🖱️
-- **Debug Tools**: Commands to configure vehicles and blacklists. 🔍
-- **Failsafes**: Timeout checks, vehicle validation, and cooldowns ensure fair play. 🛡️
+---
 
-## Requirements 📋
-- **QBCore/QBOX Framework**: Manages player data and vehicle spawning. 📦
-- **ox_lib**: Powers notifications. 📢
-- **qb/ox-inventory**: Handles item-based buy-ins and rewards (e.g., `vipracepass`, `tunerchip`). 🎒
-- **qb-target** (Optional): Needed if `Config.UseTarget` is enabled. 🎯
-- **MnC-TuneX** (Optional): Used for reward item. 🎯 https://github.com/MnCLosSantos/MnC-TuneX
-- **qb-crypto** (Optional): Required for `crypto` payment types in wagers. 💸
+## ✨ Features
 
-## Setup 🚀
-1. Place the `mnc-timetrials` folder in your server's `resources` directory. 📂
-2. Add to `server.cfg`:
-   - `ensure ox_lib`
-   - `ensure qb-core`
-   - `ensure qb-inventory`
-   - `ensure qb-target` (if using `qb-target`)
-   - `ensure qb-crypto` (if using `crypto` payment types)
-   - `ensure mnc-timetrials`
-3. Edit `config.lua` to define your races, buy-ins, rewards, and settings. ✏️
-4. Restart the server or run `refresh` and `start mnc-timetrials`. 🔄
+- 🏎️ **Multiple Custom Races** – Set up unique routes, vehicles, and challenges in `config.lua`.
+- 💸 **Buy-ins & Payouts** – Race for **cash**, **bank**, or **crypto**. The bigger the buy-in, the bigger the rewards!
+- 🎁 **Rewards & Required Items** – Win items for completing race streaks and require special items for entry (e.g., VIP Race Pass).
+- 🚫 **Vehicle Restrictions & Blacklist** – Limit races to certain vehicles or classes, block the fastest cars for fair play.
+- 🕹️ **Dynamic UI** – Vibrant, pulsing race info overlay; customizable and movable.
+- 👤 **NPC & Vehicle Spawns** – Each race can spawn a character and a display vehicle at the start point.
+- 🔔 **Proximity Taunts** – Get hyped or roasted as you approach races!
+- 🕹️ **Flexible Interaction** – Supports both "Press E" prompts and (optional) **qb-target** integration.
+- ⏱️ **Cooldowns & Progress Tracking** – Prevent spam, track your wins, and earn streak rewards.
+- 🛠️ **Easy Commands** – Admin commands for quick setup and cleanup (see below).
+- ⚙️ **Easy Setup & Expansion** – All configuration in one file, add races in minutes!
 
-## How to Play 🎮
-1. **Start a Race** 🏁:
-   - Approach a race vehicle (marked by a blip). 📍
-   - Press **E** (if `Config.UsePressE = true`) or use `qb-target` (if `Config.UseTarget = true`) within the set distance (e.g., 3.5 meters). 🖱️
-   - You must be in a vehicle; some races require a specific model. 🚘
+---
 
-2. **Race UI** 🖥️:
-   - Choose a wager tier (e.g., Easy, Medium, Hard) with required buy-ins (cash, bank, crypto, or items). 🎰
-   - Close the UI with the **Close** button or **Escape** key. 🚪
+## 📝 Setup
 
-3. **Race** 🏎️:
-   - Reach the start point within 60 seconds (set by `Config.RaceStartTimeout`). ⏰
-   - Drive to the finish before the time limit (adjusted by wager difficulty). 🏆
-   - Win to earn payouts or items; lose and hit a cooldown (e.g., 10s for testing, 20min default). 🎁
+1. **Dependencies:**  
+   - QBCore Framework  
+   - ox_lib  
+   - oxmysql
 
-4. **Debug Commands** 🔧:
-   Use these in-game with admin/developer permissions to configure the script:
-   - **`/listallwheels`** 🛞:
-     - **Purpose**: Lists wheel types (0–12) and rim indices for your current vehicle.
-     - **When**: To set `wheelType` and `rimIndex` in `Config.Races.mods`.
-     - **How**: Enter a vehicle, type `/listallwheels` in chat, and note the output (e.g., Track = 11, rims 0–25).
-     - **Example Output**: "Wheel Type 11 (Track): Rims 0–25 available."
-     - **Use Case**: Ensures valid wheel settings (e.g., `wheelType = 11, rimIndex = 1`). ✅
-   - **`/printvehmods`** 🎨:
-     - **Purpose**: Outputs all vehicle mods (visual/performance) to the console.
-     - **When**: To copy mod settings for `Config.Races.mods`.
-     - **How**: Modify a vehicle in-game, type `/printvehmods`, and copy the output to `config.lua`.
-     - **Example Output**: `{ wheelType = 7, suspension = 2, primaryColor = 90, turbo = true }`.
-     - **Use Case**: Sets up mods like neon colors or engine upgrades. 🖌️
-   - **`/listfastestvehicles`** 🚀:
-     - **Purpose**: Lists top 10 fastest vehicles per class (0–21) based on top speed.
-     - **When**: To update `Config.BlacklistedVehicles` for fair races.
-     - **How**: Type `/listfastestvehicles` in chat to see vehicles and speeds.
-     - **Example Output**: "Class 0 (Compacts): weevil (123.00 mph), brioso2 (115.50 mph)."
-     - **Use Case**: Blacklists overpowered vehicles (e.g., `weevil` in Class 0). 🚫
+2. **Installation:**  
+   - Place the folder in your `resources` directory.  
+   - Add `ensure midnightclub-timetrials` to your server config.  
+   - Make sure dependencies start first!
 
-## Configuration ⚙️
-The `config.lua` file lets you craft custom races with detailed settings for buy-ins, rewards, and failsafes. Below are all options.
+3. **Configuration:**  
+   - Edit `config.lua` to set up races, buy-ins/buyouts, rewards, vehicles, NPCs, and more.
+   - Customize proximity taunts, blip names, UI positions, and cooldowns.
 
-### General Settings
-- **`Config.RaceStartTimeout`** ⏲️:
-  - **Description**: Time (ms) to reach the race start after selecting a wager. Acts as a failsafe to prevent stalling.
-  - **Default**: `60000` (60 seconds).
-  - **Example**: `Config.RaceStartTimeout = 30000` (30 seconds).
-  - **Failsafe**: If the player doesn’t reach the start point in time, the race cancels, and the buy-in may be forfeited.
+---
 
-- **`Config.UseTarget`** 🎯:
-  - **Description**: Enables `qb-target` for race interactions (requires `qb-target` resource).
-  - **Default**: `false` (uses "Press E" if disabled).
-  - **Example**: `Config.UseTarget = true`.
-  - **Failsafe**: Ensures only one interaction method is active to avoid UI conflicts.
+## 💰 Buy-ins, Payouts, Rewards & Required Items
 
-- **`Config.UsePressE`** 🅴:
-  - **Description**: Shows "Press E to interact" prompts near race vehicles.
-  - **Default**: `true`.
-  - **Example**: `Config.UsePressE = false`.
-  - **Failsafe**: Prevents interaction overlap if both `UseTarget` and `UsePressE` are enabled.
+Each race offers **multiple wager tiers**.  
+Players choose their buy-in (cash, bank, or crypto) and receive payouts plus progress toward item rewards!
 
-### Blacklisted Vehicles 🚫
-- **`Config.BlacklistedVehicles`**:
-  - **Description**: Bans overpowered vehicles by class (0–21) to ensure fair races.
-  - **Structure**: Table with class IDs as keys and arrays of vehicle model names as values.
-  - **Purpose**: Prevents players from using top-speed vehicles (e.g., `weevil` in Compacts).
-  - **How to Update**: Use `/listfastestvehicles` to identify fast vehicles.
-  - **Example**:
-    ```lua
-    Config.BlacklistedVehicles = {
-        [0] = {"weevil", "brioso2"}, -- Compacts
-        [1] = {"schafter4", "schafter3"}, -- Sedans
-        -- ... other classes
-    }
-    ```
-  - **Classes** (0–21):
-    - 0: Compacts
-    - 1: Sedans
-    - 2: SUVs
-    - 3: Coupes
-    - 4: Muscle
-    - 5: Sports Classics
-    - 6: Sports
-    - 7: Super
-    - 8: Motorcycles
-    - 9: Off-road
-    - 10: Industrial
-    - 11: Utility
-    - 12: Vans
-    - 13: Cycles
-    - 14: Boats
-    - 15: Helicopters
-    - 16: Planes
-    - 17: Service
-    - 18: Emergency
-    - 19: Military
-    - 20: Commercial
-    - 21: Trains
-  - **Failsafe**: The script checks the player’s vehicle against this list, preventing race starts with blacklisted models.
+### Example Wager Tier (from `config.lua`):
 
-### Races 🏁
-- **`Config.Races`**:
-  - **Description**: An array of tables where you define custom races with settings for buy-ins, rewards, vehicles, and failsafes.
-  - **Structure**: Each race table includes:
+```lua
+wagers = {
+    {
+        amount = 2000,          -- 💵 Buy-in
+        name = "Easy",          -- Difficulty
+        timeModifier = 0,       -- Time bonus
+        payout = 4000,          -- 🤑 Payout
+        paymentType = "cash",   -- Type: cash/bank/crypto
+        rewardItem = { name = "tunerchip", amount = 1 }, -- 🎁 Item reward
+        requiredItem = { name = "phone", amount = 1 },   -- 🛡️ Required to enter
+        requiredRaces = 3       -- ✨ Complete streak for item
+    },
+    -- ...more tiers!
+}
+```
 
-    - **`name`** 📛:
-      - Race name for UI and blips.
-      - Example: `name = "City Sprint"`.
+- **Required Items:** Some races need special items (e.g. VIP Race Pass).
+- **Rewards:** Win cash, crypto, or exclusive items after a set number of wins.
+- **Progress:** Race completion tracked per player, per wager.
 
-    - **`notifyTitle`** 🗣️:
-      - Optional NPC name for proximity notifications.
-      - Example: `notifyTitle = "Racer Joe"`.
+---
 
-    - **`requiredVehicle`** 🚗:
-      - Optional specific vehicle model players must use (case-insensitive).
-      - Example: `requiredVehicle = "jester"`.
-      - **Failsafe**: The script checks if the player’s vehicle matches, blocking invalid vehicles.
+## 🚗 Vehicle Classes & Blacklist
 
-    - **`proximityNotifies`** 😈:
-      - Array of taunts shown near the race vehicle.
-      - Example: `proximityNotifies = {"Think you’re fast?", "Nice car, too bad it’s slow!"}`.
+- Restrict races to certain vehicle classes (e.g. only Compacts).
+- Automatically block the top 10 fastest cars in each class for balanced competition.
+- Set a **required vehicle model** for themed races!
+- **Blacklist & Classes** are fully customizable in `config.lua`.
 
-    - **`vehicleModel`** 🚘:
-      - Model of the spawned race vehicle.
-      - Example: `vehicleModel = "elegy2"`.
+---
 
-    - **`vehicleSpawn`** 📍:
-      - `vector4` for vehicle spawn (x, y, z, heading).
-      - Example: `vehicleSpawn = vector4(100.0, 200.0, 30.0, 90.0)`.
+## 🎮 Commands & Usage
 
-    - **`startPoint`** 📍:
-      - `vector4` for race start point and heading.
-      - Example: `startPoint = vector4(150.0, 250.0, 30.0, 90.0)`.
+- **Start a Race:**  
+  Drive to a race marker, press **E** or use the qb-target zone to open the UI.
+- **Select Wager:**  
+  Choose your buy-in, see the time limit, and accept the challenge.
+- **Complete the Race:**  
+  Beat the clock to win your payout and progress toward item rewards!
+- **Admin Commands:**  
+  Cleanup or respawn NPCs and vehicles by restarting the resource.
 
-    - **`endPoint`** 📍:
-      - `vector4` for race finish point and heading.
-      - Example: `endPoint = vector4(300.0, 400.0, 30.0, 90.0)`.
+---
 
-    - **`maxTime`** ⏱️:
-      - Maximum race duration (seconds).
-      - Example: `maxTime = 60.0`.
-      - **Failsafe**: Players failing to finish in time lose the race and buy-in.
+## 📦 File Structure
 
-    - **`cooldown`** ⏳:
-      - Cooldown (ms) before the race can be restarted.
-      - Example: `cooldown = 20 * 60 * 1000` (20 minutes).
-      - **Failsafe**: Prevents spamming by locking the race after completion or failure.
+| File                      | Purpose                                      |
+|---------------------------|----------------------------------------------|
+| `client.lua`              | Player logic, UI, controls, events           |
+| `server.lua`              | Wagers, payouts, race progress, anti-cheat   |
+| `config.lua`              | All race, reward, vehicle & NPC settings     |
+| `vehicle_spawner.lua`     | NPC/vehicle spawn & cleanup (server)         |
+| `vehicle_spawner_client.lua` | NPC/vehicle spawn (client)                |
+| `fxmanifest.lua`          | Resource manifest, dependencies              |
+| `html/`                   | UI assets (customizable)                     |
 
-    - **`wagers`** 💰:
-      - Array of wager tiers defining buy-ins, difficulty, and rewards.
-      - **Fields**:
-        - `amount`: Buy-in cost (0 for free).
-          - Example: `amount = 5000`.
-        - `name`: Difficulty name (e.g., Easy, Medium, Hard).
-          - Example: `name = "Easy"`.
-        - `timeModifier`: Seconds subtracted from `maxTime` for difficulty.
-          - Example: `timeModifier = 2`.
-        - `payout`: Reward amount for winning.
-          - Example: `payout = 10000`.
-        - `paymentType`: Buy-in method (`cash`, `bank`, `crypto`).
-          - Example: `paymentType = "bank"`.
-        - `rewardItem`: Optional item reward on win.
-          - Structure: `{ name = "item_name", amount = number }`.
-          - Example: `rewardItem = { name = "tunerchip", amount = 1 }`.
-        - `requiredItem`: Optional item required for the wager.
-          - Structure: `{ name = "item_name", amount = number }`.
-          - Example: `requiredItem = { name = "vipracepass", amount = 1 }`.
-          - **Failsafe**: The script checks for sufficient items via `qb-inventory` before starting.
-        - `requiredRaces`: Number of race completions for `rewardItem`.
-          - Example: `requiredRaces = 3`.
-      - **Example**:
-        ```lua
-        wagers = {
-            { amount = 5000, name = "Easy", timeModifier = 0, payout = 10000, paymentType = "bank", rewardItem = { name = "lockpick", amount = 2 }, requiredRaces = 3 },
-            { amount = 10, name = "Hard", timeModifier = 4, payout = 20, paymentType = "crypto", requiredItem = { name = "vipracepass", amount = 1 } }
-        }
-        ```
+---
 
-    - **`allowedClasses`** 🏎️:
-      - Array of allowed vehicle classes (0–21, see Blacklisted Vehicles).
-      - Example: `allowedClasses = { 6 }` (Sports).
-      - **Failsafe**: The script verifies the player’s vehicle class, blocking invalid ones.
+## 🛠️ Customization
 
-    - **`mods`** 🎨:
-      - Modifications for the spawned race vehicle.
-      - **Fields**:
-        - `wheelType`: Wheel category (0=Sport, 1=Muscle, ..., 11=Track, 12=Benny's Originals).
-          - Example: `wheelType = 11`.
-        - `rimIndex`: Rim index (0–n, depends on `wheelType`).
-          - Example: `rimIndex = 1`.
-        - `suspension`: Suspension level (0=Stock, 1=Lowered, ..., 4=Competition).
-          - Example: `suspension = 2`.
-        - `livery`: Livery index (0–n, depends on vehicle).
-          - Example: `livery = -1` (default).
-        - `spoiler`, `hood`, `skirts`, `frontBumper`, `rearBumper`: Visual mod indices (0–n).
-          - Example: `spoiler = 0`.
-        - `primaryColor`, `secondaryColor`, `pearlescent`, `wheelColor`: Color indices (0–160).
-          - Example: `primaryColor = 90`.
-        - `windowTint`: Tint level (0=None, 1=Pure Black, ..., 5=Limo).
-          - Example: `windowTint = 3`.
-        - `plateIndex`: Plate type (0=Blue/White, ..., 9=SA Exempt 2, ..., 12=Black Plate).
-          - Example: `plateIndex = 9`.
-        - `neon`: RGB color for neon lights (requires neon enabled).
-          - Example: `neon = {255, 0, 255}` (purple).
-        - `headlights`: Xenon headlight color (0=White, 1=Blue, ..., 12=Blacklight).
-          - Example: `headlights = 2`.
-        - `engine`, `transmission`, `brakes`: Performance mods (0=Stock, ..., 3=Race).
-          - Example: `engine = 3`.
-        - `turbo`: Enable turbo (`true` or `false`).
-          - Example: `turbo = true`.
-      - **Example**:
-        ```lua
-        mods = {
-            wheelType = 7,
-            rimIndex = 3,
-            suspension = 2,
-            livery = 2,
-            primaryColor = 90,
-            neon = {255, 0, 255},
-            headlights = 7,
-            engine = 3,
-            turbo = true
-        }
-        ```
+- **Add Races:** Copy/paste a race entry in `Config.Races` and set locations, vehicles, rewards, etc.
+- **Change UI:** Edit UI HTML/CSS for a custom look.
+- **Tweak Difficulty:** Adjust time limits, payouts, required items, and vehicle restrictions.
+- **Edit Taunts:** Make your server's races as friendly or savage as you like!
 
-    - **`ped`** 🧍:
-      - Optional NPC at the race vehicle.
-      - **Fields**:
-        - `model`: Ped model (e.g., `s_m_y_xmech_02`).
-        - `coords`: `vector4` for ped location and heading.
-        - `animationSet`: Animation dictionary and animations.
-          - Structure: `{ dict = "animation_dict", anims = {"anim_name"} }`.
-          - Example: `animationSet = { dict = "cellphone@", anims = {"cellphone_call_listen_base"} }`.
-      - **Example**:
-        ```lua
-        ped = {
-            model = "s_m_y_xmech_02",
-            coords = vector4(100.0, 200.0, 30.0, 90.0),
-            animationSet = { dict = "cellphone@", anims = {"cellphone_call_listen_base"} }
-        }
-        ```
+---
 
-    - **`target`** 🎯:
-      - Settings for `qb-target` interactions (if `Config.UseTarget = true`).
-      - **Fields**:
-        - `label`: Interaction label in UI.
-          - Example: `label = "Start Race"`.
-        - `icon`: FontAwesome icon (e.g., `fas fa-car`).
-        - `distance`: Interaction range (meters).
-          - Example: `distance = 3.5`.
-      - **Example**:
-        ```lua
-        target = {
-            label = "Start Race",
-            icon = "fas fa-car",
-            distance = 3.5
-        }
-        ```
+## 🙏 Credits
 
-  - **Example Race**:
-    ```lua
-    Config.Races = {
-        {
-            name = "City Loop",
-            notifyTitle = "Racer",
-            requiredVehicle = "comet5",
-            proximityNotifies = {"Ready to race?", "Show me your speed!"},
-            vehicleModel = "comet5",
-            vehicleSpawn = vector4(100.0, 200.0, 30.0, 90.0),
-            startPoint = vector4(150.0, 250.0, 30.0, 90.0),
-            endPoint = vector4(300.0, 400.0, 30.0, 90.0),
-            maxTime = 60.0,
-            cooldown = 20 * 60 * 1000,
-            wagers = {
-                { amount = 5000, name = "Easy", timeModifier = 0, payout = 10000, paymentType = "bank" }
-            },
-            allowedClasses = { 6 },
-            mods = { wheelType = 7, primaryColor = 90, turbo = true },
-            target = { label = "Start Race", icon = "fas fa-car", distance = 3.5 }
-        }
-    }
-    ```
+- Developed by **Midnight Club**
+- Inspired by classic street racing and time trial games
 
-### Buy-ins 💸
-Buy-ins are defined in the `wagers` table and are required to start a race:
-- **Currency Buy-ins**:
-  - Set via `amount` and `paymentType` (`cash`, `bank`, `crypto`).
-  - Example: `{ amount = 5000, paymentType = "bank" }` requires 5,000 in bank funds.
-  - **Note**: `crypto` requires `qb-crypto` resource.
-  - **Failsafe**: The script checks if the player has sufficient funds before starting; if not, the race is blocked with a notification.
-- **Item Buy-ins**:
-  - Set via `requiredItem` with `{ name = "item_name", amount = number }`.
-  - Example: `{ requiredItem = { name = "vipracepass", amount = 1 } }` requires 1 `vipracepass`.
-  - **Note**: Requires `qb-inventory` for item validation.
-  - **Failsafe**: The script verifies the player’s inventory for the required item and amount, preventing race start if missing.
+---
 
-### Reward Types 🎁
-Rewards are defined in the `wagers` table and granted on race completion:
-- **Currency Payouts**:
-  - Set via `payout` and `paymentType` (`cash`, `bank`, `crypto`).
-  - Example: `{ payout = 10000, paymentType = "bank" }` awards 10,000 in bank funds.
-  - **Note**: `crypto` requires `qb-crypto` resource.
-- **Item Rewards**:
-  - Set via `rewardItem` with `{ name = "item_name", amount = number }`.
-  - Example: `{ rewardItem = { name = "tunerchip", amount = 1 } }`.
-  - Requires `requiredRaces` completions to unlock.
-  - Example: `{ requiredRaces = 3 }` means 3 wins for the item.
-  - **Note**: Requires `qb-inventory` for item delivery.
-- **Failsafe**: The script tracks race completions (`requiredRaces`) and ensures rewards are only given when conditions are met.
+## 🆘 Support
 
-### Failsafes 🛡️
-The script includes several failsafes to ensure smooth and fair gameplay:
-- **Race Start Timeout** (`Config.RaceStartTimeout`): Cancels the race if the player doesn’t reach the start point in time, protecting against stalling.
-- **Vehicle Validation** (`requiredVehicle`, `allowedClasses`): Checks the player’s vehicle against required models or classes, blocking invalid entries.
-- **Blacklist Check** (`Config.BlacklistedVehicles`): Prevents overpowered vehicles from being used, ensuring balance.
-- **Buy-in Validation** (`amount`, `requiredItem`): Verifies sufficient funds or items via `qb-inventory` (and `qb-crypto` for crypto) before starting, avoiding exploits.
-- **Cooldown System** (`cooldown`): Locks races after completion or failure to prevent spamming.
-- **Interaction Exclusivity** (`UseTarget`, `UsePressE`): Ensures only one interaction method is active to avoid conflicts.
+Open a GitHub issue for help, suggestions, or bug reports!
 
-## Customization 🎨
-1. **Create New Races** 🏁:
-   - Add a table to `Config.Races` with custom settings for buy-ins, vehicles, and locations.
-   - Use in-game coordinates (e.g., via a coords command) for `vehicleSpawn`, `startPoint`, and `endPoint`.
-   - Example:
-     ```lua
-     {
-         name = "Highway Dash",
-         vehicleModel = "pariah",
-         vehicleSpawn = vector4(x, y, z, h),
-         startPoint = vector4(x, y, z, h),
-         endPoint = vector4(x, y, z, h),
-         maxTime = 70.0,
-         cooldown = 20 * 60 * 1000,
-         wagers = { { amount = 10000, name = "Easy", timeModifier = 0, payout = 20000, paymentType = "cash" } },
-         allowedClasses = { 6 },
-         mods = { wheelType = 7, turbo = true }
-     }
-     ```
+---
 
-2. **Customize Buy-ins & Rewards** 💰:
-   - Add wager tiers with `amount`, `paymentType`, or `requiredItem` for buy-ins, and `payout` or `rewardItem` for rewards.
-   - Example:
-     ```lua
-     { amount = 20, name = "Insane", timeModifier = 10, payout = 40, paymentType = "crypto", requiredItem = { name = "vipracepass", amount = 1 }, rewardItem = { name = "nitrous", amount = 1 } }
-     ```
-
-3. **Tune Vehicle Mods** 🛠️:
-   - Use `/printvehmods` to copy mod indices after customizing a vehicle in-game.
-   - Example: Set `primaryColor = 141` (Hot Pink), `neon = {255, 0, 255}` (purple).
-
-4. **Adjust UI** 🖥️:
-   - Edit `html/style.css` to reposition or style UI elements (e.g., `#main-menu`).
-   - Example:
-     ```css
-     #main-menu { top: 10%; left: 10%; width: 400px; }
-     ```
-
-## Tips 📝
-- Verify vehicle models exist in your server. ✅
-- Test coordinates in-game to avoid spawn issues. 📍
-- Balance `maxTime` and `timeModifier` for fair difficulty. ⚖️
-- Use short cooldowns (e.g., 10000ms) for testing, 20min (1200000ms) for live. ⏳
-- Use `/listallwheels` and `/printvehmods` for accurate mod settings. 🔧
-- Ensure `qb-inventory` is running for item-based buy-ins and rewards. 🎒
-- Include `qb-crypto` if using `crypto` buy-ins or payouts. 💸
+**Start your engines. Bet big. Race hard. Win respect.**

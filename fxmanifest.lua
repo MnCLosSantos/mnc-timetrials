@@ -1,19 +1,24 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'Midnight Club Los Santos Time Trial Races'
+author 'Midnight Club'
+description 'Time Trials with Wagers'
 version '1.0.0'
 
 shared_scripts {
+    '@ox_lib/init.lua',
     'config.lua'
 }
 
 client_scripts {
-    'client.lua'
+    'client.lua',
+    'vehicle_spawner_client.lua'
 }
 
 server_scripts {
-    'server.lua'
+    '@oxmysql/lib/MySQL.lua',
+    'server.lua',
+    'vehicle_spawner.lua'
 }
 
 ui_page 'html/index.html'
@@ -24,8 +29,4 @@ files {
     'html/script.js'
 }
 
-dependencies {
-    'qb-target',
-    'ox_lib' 
-}
-
+lua54 'yes'
