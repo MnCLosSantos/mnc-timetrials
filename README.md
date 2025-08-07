@@ -73,7 +73,7 @@ wagers = {
 
 ---
 
-## 🚗 Vehicle Classes & Blacklist
+## 🚗 Vehicle Classes & Blacklist.
 
 - Restrict races to certain vehicle classes (e.g. only Compacts).
 - Automatically block the top 10 fastest cars in each class for balanced competition.
