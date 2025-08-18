@@ -377,66 +377,7 @@ Config.Races = {
 
         -- Restrict race to vehicle classes (0 = Compacts)
         allowedClasses = { 0 },
-
-
-        -- Vehicle modifications (optional)
-        mods = {
-            -- Wheel category (0-12):
-            -- 0=Sport, 1=Muscle, 2=Lowrider, 3=SUV, 4=Offroad,
-            -- 5=Tuner, 6=Bike, 7=High End, 8=Mod, 9=Open Wheel,
-            -- 10=Street, 11=Track, 12=Benny's Originals
-            wheelType = 11,
-
-            -- Rim index: depends on wheelType, values typically 0–25+ depending on type
-            rimIndex = 1,
-
-            -- Suspension: 0=Stock, 1=Lowered, 2=Street, 3=Sport, 4=Competition
-            suspension = 1,
-
-            -- Livery index (0–n depending on vehicle model)
-            livery = -1,
-
-            -- Visual mods (0–n varies by car, avarage 10):
-            spoiler = 0,
-            hood = 5,
-            skirts = 0,
-            frontBumper = 0,
-            rearBumper = 2,
-
-            -- Colors (from helper.txt List):
-            -- primaryColor/secondaryColor/pearlescent/wheelColor: 0–160
-            primaryColor = 90,      -- e.g. 18 = Dark Green
-            secondaryColor = 90,   -- e.g. 141 = Hot Pink
-            pearlescent = 111,      -- e.g. 111 = Ultra Blue
-            wheelColor = 119,        -- e.g. 10 = Black
-
-            -- Window Tints:
-            -- 0=None, 1=Pure Black, 2=Dark Smoke, 3=Light Smoke, 4=Stock, 5=Limo
-            windowTint = 3,
-
-            -- Plate types:
-            -- 0=Blue/White, 1=Yellow/Black, 2=Yellow/Blue, 3=Blue/White 2,
-            -- 4=Blue/White 3, 5=North Yankton, 6=SA Exempt, 7=Government,
-            -- 8=Air Force, 9=SA Exempt 2, 10=Liberty City, 11=White Plate, 12=Black Plate
-            plateIndex = 9,
-
-            -- Neon light color (RGB): applies to all sides
-            neon = {0, 75, 0}, -- Purple (neon must be enabled elsewhere)
-
-            -- Headlights (Xenon colors):
-            -- 0=White, 1=Blue, 2=Electric Blue, 3=Mint Green, 4=Lime Green,
-            -- 5=Yellow, 6=Golden Shower, 7=Orange, 8=Red, 9=Pink,
-            -- 10=Hot Pink, 11=Purple, 12=Blacklight
-            headlights = 2,
-
-            -- Performance Mods:
-            -- 0=Stock, 1=Street, 2=Sport, 3=Race
-            engine = 3,
-            transmission = 2,
-            brakes = 2,
-            -- Turbo enabled
-            turbo = 1        
-        },
+        
         -- Optional NPC and animation
         ped = {
             model = "s_m_y_xmech_02",
@@ -487,29 +428,6 @@ Config.Races = {
             { amount = 40000, name = "Extreme", timeModifier = 8, payout = 80000, paymentType = "bank", rewardItem = { name = "nitrous", amount = 1 }, requiredItem = { name = "vipracepass", amount = 1 } }
         },
         allowedClasses = { 4 },
-        mods = {
-            wheelType = 11,
-            rimIndex = 3,
-            suspension = 3,
-            livery = 5,
-            spoiler = 5,
-            hood = 5,
-            skirts = 3,
-            frontBumper = 6,
-            rearBumper = 0,
-            primaryColor = 18,
-            secondaryColor = 141,
-            pearlescent = 111,
-            wheelColor = 10,
-            windowTint = 1,
-            plateIndex = 10,
-            neon = {255, 0, 255},
-            headlights = 10,
-            engine = 2,
-            transmission = 2,
-            brakes = 2,
-            turbo = true
-        },
         -- Added: Optional NPC and animation
         ped = {
             model = "a_m_y_stlat_01",
@@ -555,29 +473,6 @@ Config.Races = {
             { amount = 40000, name = "Extreme", timeModifier = 8, payout = 80000, paymentType = "crypto", rewardItem = { name = "nitrous", amount = 1 }, requiredItem = { name = "vipracepass", amount = 1 }, requiredRaces = 6 }
         },
         allowedClasses = { 6 },
-        mods = {
-            wheelType = 7,
-            rimIndex = 2,
-            suspension = 3,
-            livery = 1,
-            spoiler = 3,
-            hood = 2,
-            skirts = 1,
-            frontBumper = 3,
-            rearBumper = 2,
-            primaryColor = 12,
-            secondaryColor = 12,
-            pearlescent = 111,
-            wheelColor = 10,
-            windowTint = 2,
-            plateIndex = 4,
-            neon = {255, 0, 255},
-            headlights = 8,
-            engine = 3,
-            transmission = 2,
-            brakes = 2,
-            turbo = true
-        },
         ped = {
             model = "a_m_y_business_01",
             coords = vector4(150.25, -1030.12, 29.34, 160.23),
@@ -593,3 +488,4 @@ Config.Races = {
         }
     }
 }
+
