@@ -4,10 +4,6 @@ Config = {}
 -- Do not change unless you update the notification logic accordingly
 Config.RaceStartTimeout = 60000
 
--- Interaction settings:
--- If true, use qb-target zones for starting races
-Config.UseTarget = false
-
 -- If true, show "Press E to interact" prompts instead of using qb-target
 Config.UsePressE = true
 
@@ -488,4 +484,5 @@ Config.Races = {
         }
     }
 }
+
 
