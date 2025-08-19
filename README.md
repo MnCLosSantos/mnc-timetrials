@@ -100,8 +100,12 @@ wagers = {
 - **Tweak Difficulty:** Adjust time limits, payouts, required items, and vehicle restrictions.
 - **Edit Taunts:** Make your server's races as friendly or savage as you like!
 ---
+
+---
 - Original Ui
 <img width="1920" height="1080" alt="a-original" src="https://github.com/user-attachments/assets/a34ec35a-dd0f-4b6b-953a-ec0d781af427" />
+---
+
 ---
 - basic-1
 <img width="1920" height="1080" alt="basic-1" src="https://github.com/user-attachments/assets/2b5a5104-6116-4621-a126-cafe034c692a" />
