@@ -1,0 +1,92 @@
+/* Style 4: Retro Racing Pixel */
+body {
+    font-family: 'Pixelify Sans', sans-serif;
+    color: #00ff00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.menu {
+    display: none;
+    background: #1c2526;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAFElEQVR42mNkYGD4z8DAwMgABXAG/w0IAO+bA4IAAAAASUVORK5CYII=');
+    border: 3px solid #00ff00;
+    padding: 20px;
+    border-radius: 8px;
+    width: 330px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+}
+
+h1 {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px #ff0000;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button.easy {
+    background: #00ff00;
+    color: #000000;
+}
+
+button.easy:hover {
+    background: #00cc00;
+}
+
+button.medium {
+    background: #ffff00;
+    color: #000000;
+}
+
+button.medium:hover {
+    background: #cccc00;
+}
+
+button.hard {
+    background: #ff0000;
+    color: #ffffff;
+}
+
+button.hard:hover {
+    background: #cc0000;
+}
+
+button.extreme {
+    background: #00ffff;
+    color: #000000;
+}
+
+button.extreme:hover {
+    background: #00cccc;
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme) {
+    background: #ffffff;
+    color: #000000;
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme):hover {
+    background: #cccccc;
+}
+
+button:disabled {
+    background: #555555;
+    color: #888888;
+    border-color: #888888;
+    cursor: not-allowed;
+}

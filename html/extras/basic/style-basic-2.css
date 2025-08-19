@@ -1,0 +1,86 @@
+/* Style 2: Glassmorphic Retro */
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: rgba(0, 0, 0, 0.0);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.menu {
+    display: none;
+    background: rgba(28, 37, 38, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    color: black;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+button.easy {
+    background: rgba(0, 255, 0, 0.2);
+}
+
+button.easy:hover {
+    background: rgba(0, 204, 0, 0.3);
+}
+
+button.medium {
+    background: rgba(255, 255, 0, 0.2);
+}
+
+button.medium:hover {
+    background: rgba(204, 204, 0, 0.3);
+}
+
+button.hard {
+    background: rgba(255, 162, 0, 0.2);
+}
+
+button.hard:hover {
+    background: rgba(225, 143, 1, 0.3);
+}
+
+button.extreme {
+    background: rgba(255, 16, 56, 0.2);
+}
+
+button.extreme:hover {
+    background: rgba(212, 12, 45, 0.3);
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme) {
+    background: rgba(212, 12, 45, 0.2);
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme):hover {
+    background: rgba(0, 255, 240, 0.3);
+}
+
+button:disabled {
+    background: rgba(97, 97, 97, 0.2);
+    cursor: not-allowed;
+}

@@ -1,0 +1,89 @@
+/* Style 1: Futuristic Holographic */
+body {
+    font-family: 'Exo 2', sans-serif;
+    color: #00e6ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.menu {
+    display: none;
+        background: radial-gradient(circle, #0a0a23, #1c2526) rgba(0, 0, 0, 0.7);
+    border: 1px solid #00e6ff;
+    padding: 25px;
+    border-radius: 15px;
+    width: 360px;
+    box-shadow: 0 0 40px rgba(0, 230, 255, 0.3);
+}
+
+h1 {
+    font-size: 16px;
+    margin-bottom: 25px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: 0 0 10px #00e6ff, 0 0 20px #00e6ff; }
+    50% { text-shadow: 0 0 20px #00e6ff, 0 0 30px #00e6ff; }
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: transform 0.5s ease;
+    transform: translateX(-100%);
+}
+
+button:hover::before {
+    transform: translateX(100%);
+}
+
+button.easy {
+    background: #00ff7f;
+}
+
+button.medium {
+    background: #ffd700;
+}
+
+button.hard {
+    background: #ff4500;
+}
+
+button.extreme {
+    background: #ff1493;
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme) {
+    background: #4682b4;
+}
+
+button:disabled {
+    background: #2f4f4f;
+    color: #708090;
+    cursor: not-allowed;
+}

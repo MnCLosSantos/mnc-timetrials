@@ -1,0 +1,108 @@
+/* Style 2: Formula 1 Precision */
+body {
+    font-family: 'Formula1', 'Arial', sans-serif;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.menu {
+    display: none;
+    background: linear-gradient(180deg, #000000, #1c2526);
+	background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"%3E%3Cpath fill="%23111111" d="M0 0h40v40H0z"/%3E%3Cpath fill="%23ffffff" fill-opacity="0.1" d="M0 0h40v2H0zM0 10h40v2H0zM0 20h40v2H0zM0 30h40v2H0z"/%3E%3C/svg%3E');
+    border: 2px solid #ff0000;
+    padding: 25px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+h1 {
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #ff0000;
+    text-shadow: 0 0 10px #ff0000;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+button::after {
+    position: absolute;
+    right: 10px;
+    opacity: 0.5;
+    transition: transform 0.3s ease;
+}
+
+button:hover::after {
+    transform: scale(1.2);
+}
+
+button.easy {
+    background: linear-gradient(45deg, #00ff00, #00cc00);
+}
+
+button.easy:hover {
+    box-shadow: 0 0 15px #00ff00;
+}
+
+button.medium {
+    background: linear-gradient(45deg, #ffffff, #cccccc);
+}
+
+button.medium:hover {
+    box-shadow: 0 0 15px #ffffff;
+}
+
+button.hard {
+    background: linear-gradient(45deg, #ff0000, #cc0000);
+}
+
+button.hard:hover {
+    box-shadow: 0 0 15px #ff0000;
+}
+
+button.extreme {
+    background: linear-gradient(45deg, #0000ff, #0000cc);
+}
+
+button.extreme:hover {
+    box-shadow: 0 0 15px #0000ff;
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme) {
+    background: linear-gradient(45deg, #ff0000, #ffffff);
+}
+
+button:not(.easy):not(.medium):not(.hard):not(.extreme):hover {
+    box-shadow: 0 0 15px #ffffff;
+}
+
+button:disabled {
+    background: #333333;
+    color: #666666;
+    cursor: not-allowed;
+    box-shadow: none;
+}
