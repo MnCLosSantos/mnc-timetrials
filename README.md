@@ -19,7 +19,7 @@ Welcome to **Midnight Club Time Trials** – bring the thrill of wager-based rac
 - 🕹️ **Dynamic UI** – Vibrant, pulsing race info overlay; customizable and movable.
 - 👤 **NPC & Vehicle Spawns** – Each race can spawn a character and a display vehicle at the start point.
 - 🔔 **Proximity Taunts** – Get hyped or roasted as you approach races!
-- 🕹️ **Flexible Interaction** – Supports both "Press E" prompts and (optional) **qb-target** integration.
+- 🕹️ **Flexible Interaction** – Supports both "Press E" prompts.
 - ⏱️ **Cooldowns & Progress Tracking** – Prevent spam, track your wins, and earn streak rewards.
 - 🛠️ **Easy Commands** – Admin commands for quick setup and cleanup (see below).
 - ⚙️ **Easy Setup & Expansion** – All configuration in one file, add races in minutes!
