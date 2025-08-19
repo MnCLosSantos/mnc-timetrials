@@ -128,7 +128,6 @@ wagers = {
 
 - simple-4
 <img width="1920" height="1080" alt="simple-4" src="https://github.com/user-attachments/assets/fd017d1b-7be4-4a96-a170-ed56889cf6b2" />
----
 
 
 ## 🙏 Credits
