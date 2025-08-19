@@ -179,9 +179,10 @@ Open a GitHub issue for help, suggestions, or bug reports!
 
 **Start your engines. Bet big. Race hard. Win respect.**
 
---------------------------------------------------------------------------------------------------------------------------------------
+---
 
 | Code is accessible | Yes |
 | Subscription | No |
 | Support | Yes |
+
 ---
