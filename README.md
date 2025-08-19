@@ -99,34 +99,34 @@ wagers = {
 - **Change UI:** Edit UI HTML/CSS for a custom look.
 - **Tweak Difficulty:** Adjust time limits, payouts, required items, and vehicle restrictions.
 - **Edit Taunts:** Make your server's races as friendly or savage as you like!
-
+---
 - Original Ui
 <img width="1920" height="1080" alt="a-original" src="https://github.com/user-attachments/assets/a34ec35a-dd0f-4b6b-953a-ec0d781af427" />
-
+---
 - basic-1
 <img width="1920" height="1080" alt="basic-1" src="https://github.com/user-attachments/assets/2b5a5104-6116-4621-a126-cafe034c692a" />
-
+---
 - basic-2
 <img width="1920" height="1080" alt="basic-2" src="https://github.com/user-attachments/assets/dd43b8eb-528d-4e12-bffd-30a2b4151232" />
-
+---
 - basic-3
 <img width="1920" height="1080" alt="basic-3" src="https://github.com/user-attachments/assets/416fd168-ef81-42ae-851e-95bc70982cb6" />
-
+---
 - basic-4
 <img width="1920" height="1080" alt="basic-4" src="https://github.com/user-attachments/assets/885dcc65-592e-4100-b2d4-1aa32e458159" />
-
+---
 - simple-1
 <img width="1920" height="1080" alt="simple-1" src="https://github.com/user-attachments/assets/d6fbc82c-ebdd-4ac1-b82b-009eb694fa23" />
-
+---
 - simple-2
 <img width="1920" height="1080" alt="simple-2" src="https://github.com/user-attachments/assets/c49a17a2-37cb-4c6e-abe4-c1da750713b2" />
-
+---
 - simple-3
 <img width="1920" height="1080" alt="simple-3" src="https://github.com/user-attachments/assets/e6fdb901-b663-4808-83d4-c48218878beb" />
-
+---
 - simple-4
 <img width="1920" height="1080" alt="simple-4" src="https://github.com/user-attachments/assets/fd017d1b-7be4-4a96-a170-ed56889cf6b2" />
-
+---
 
 ## 🙏 Credits
 
