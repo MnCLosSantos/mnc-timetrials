@@ -90,8 +90,6 @@ wagers = {
   Choose your buy-in, see the time limit, and accept the challenge.
 - **Complete the Race:**  
   Beat the clock to win your payout and progress toward item rewards!
-- **Admin Commands:**  
-  Cleanup or respawn NPCs and vehicles by restarting the resource.
 
 ---
 
