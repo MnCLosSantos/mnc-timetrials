@@ -184,3 +184,4 @@ Open a GitHub issue for help, suggestions, or bug reports!
 | Code is accessible | Yes |
 | Subscription | No |
 | Support | Yes |
+---
