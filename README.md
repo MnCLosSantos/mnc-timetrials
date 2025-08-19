@@ -5,7 +5,7 @@
 
 ## 🚦 Overview
 
-Welcome to **Midnight Club Time Trials** – bring the thrill of wager-based racing to your FiveM server! Challenge players to beat the clock, risk their cash, bank, or crypto, and unlock exclusive rewards! Fully compatible with QBCore, packed with customization, immersive UI, and plenty of racing attitude.  
+Welcome to **Midnight Club Time Trials** – bring the thrill of wager-based racing to your FiveM server! Challenge players to beat the clock, risk their cash, bank, or crypto, and unlock exclusive rewards! Fully compatible with QBCore, packed with customization, UI of your choice, and plenty of racing attitude.  
 **Get started, get paid, get respect.**
 
 ---
